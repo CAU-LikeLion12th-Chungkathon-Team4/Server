@@ -32,6 +32,8 @@ dependencies {
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 	// h2
 	runtimeOnly 'com.h2database:h2'
+	// mysql
+	runtimeOnly 'com.mysql:mysql-connector-j'
 	// healthcheck
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
