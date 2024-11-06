@@ -37,5 +37,7 @@ out/
 .vscode/
 
 ### SECRET-KEY ###
-src/main/resources/application-SECERET-KEY.properties
+src/main/resources/application-SECRET-KEY.properties
 
+### bfg ###
+bfg-1.14.0.jar
