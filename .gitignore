@@ -36,4 +36,6 @@ out/
 ### VS Code ###
 .vscode/
 
-application-SECRET-KEY.properties
+### SECRET-KEY ###
+src/main/resources/application-SECERET-KEY.properties
+
