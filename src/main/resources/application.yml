@@ -24,6 +24,18 @@ spring:
   profiles:
     include: SECRET-KEY
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${oauth-client-id}
+            client-secret: ${oauth-client-pw}
+            scope:
+              -email
+              -profile
+            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:13306/${database-name}
