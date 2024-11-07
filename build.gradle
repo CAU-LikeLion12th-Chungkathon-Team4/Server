@@ -36,6 +36,8 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	// healthcheck
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	// OAuth
+	implementation 'org.springframework.boot:spring-boot-starter-oauth-client'
 }
 
 tasks.named('test') {
