@@ -1,6 +1,7 @@
 package com.chungkathon.squirrel.service;
 
 import com.chungkathon.squirrel.domain.User;
+import com.chungkathon.squirrel.dto.SessionUser;
 import com.chungkathon.squirrel.repository.UserRepository;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
