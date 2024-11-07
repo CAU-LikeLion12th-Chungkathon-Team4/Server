@@ -1,5 +1,7 @@
 package com.chungkathon.squirrel.config;
 
+import com.chungkathon.squirrel.domain.Role;
+import com.chungkathon.squirrel.service.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
