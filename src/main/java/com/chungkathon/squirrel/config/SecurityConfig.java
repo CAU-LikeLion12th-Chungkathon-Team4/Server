@@ -8,7 +8,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+
+import java.util.Arrays;
+import java.util.Collections;
 
 @Configuration
 @RequiredArgsConstructor
@@ -20,6 +25,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                .cors(SecurityConfig::corsAllow)
                 .csrf(
                         (csrfConfig) -> csrfConfig.disable()
                 )
@@ -46,5 +52,21 @@ public class SecurityConfig {
         */
 
         return http.build();
+    }
+
+    // cors 설정
+    private static void corsAllow(CorsConfigurer<HttpSecurity> corsCustomizer) {
+        corsCustomizer.configurationSource(request -> {
+
+            CorsConfiguration configuration = new CorsConfiguration();
+
+            configuration.setAllowedMethods(Collections.singletonList("*"));        // 모든 HTTP 메서드를 허용
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));        // 3000번 포트 열기
+            configuration.setAllowedHeaders(Collections.singletonList("*"));        // 모든 요청 헤더를 허용
+            configuration.setAllowCredentials(true);        // 쿠키와 같은 자격 증명 정보를 허용
+            configuration.setMaxAge(3600L);     // 캐시 시간을 3600초로 설정
+
+            return configuration;
+        });
     }
 }
