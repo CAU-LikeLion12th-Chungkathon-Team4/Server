@@ -18,13 +18,16 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String name;    // 구글 계정 이름
 
     @Column(nullable = false)
-    private String email;
+    private String squirrelName;        // 다람쥐 이름
+
+    @Column(nullable = false)
+    private String email;       // 이메일 주소
 
     @Column
-    private String picture;
+    private String picture;     // 사용자 프로필 사진
 
     /* 각 사용자의 권한을 관리할 Enum 클래스 (ROLE_ADMIN, ROLE_USER 등)
     * Spring Security에는 권한 코드에 항상 ROLE_이 앞에 있어야 함 */
