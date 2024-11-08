@@ -29,9 +29,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-                        .requestMatchers("/posts/new", "/comments/save").hasRole(Role.USER.name())
-                        .requestMatchers("/", "/css/**", "images/**", "/js/**", "/login/*", "/logout/*", "/posts/**", "/comments/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/join", "/login").permitAll()      // 회원가입, 로그인은 모든 사용자가 접근할 수 있어야 함
                 )
                 .logout( // 로그아웃 성공 시 / 주소로 이동
                         (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
