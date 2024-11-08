@@ -29,7 +29,7 @@ public class SecurityConfig {
                         )
                 )
                 .authorizeHttpRequests((authorizeRequest) -> authorizeRequest
-                        .requestMatchers("/join", "/login").permitAll()      // 회원가입, 로그인은 모든 사용자가 접근할 수 있어야 함
+                        .requestMatchers("/join", "/login").permitAll()      // 회원가입, 로그인은 모든 사용자가 접근할 수 있어야 함 (이후 post하는 것도 추가할 예정)
                 )
                 .logout( // 로그아웃 성공 시 / 주소로 이동
                         (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
