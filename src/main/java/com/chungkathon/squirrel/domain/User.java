@@ -20,7 +20,7 @@ public class User {
     @Column(nullable = false)
     private String name;    // 구글 계정 이름
 
-    @Column(nullable = false)
+    @Column
     private String squirrelName;        // 다람쥐 이름
 
     @Column(nullable = false)
