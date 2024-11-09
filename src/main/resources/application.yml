@@ -32,7 +32,9 @@ spring:
             client-id: ${oauth-client-id}
             client-secret: ${oauth-client-pw}
             scope: ["email", "profile"]
-            redirect-uri: "http://localhost:8080/login/oauth2/code/google"
+            redirect-uri:
+              - "http://localhost:8080/login/oauth2/code/google"
+              - "https://photori.n-e.kr/login/oauth2/code/google"
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
