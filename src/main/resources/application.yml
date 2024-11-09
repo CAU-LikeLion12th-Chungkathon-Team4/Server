@@ -63,3 +63,7 @@ spring:
     endpoint:
       health:
         show-details: always
+
+# jwt
+jwt:
+  secret-key:${jwt-secret-key}
