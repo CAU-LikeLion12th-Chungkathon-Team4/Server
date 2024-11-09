@@ -38,6 +38,7 @@ out/
 
 ### SECRET-KEY ###
 src/main/resources/application-SECRET-KEY.properties
+src/main/resources/application-jwt.yml
 
 ### bfg ###
 bfg-1.14.0.jar

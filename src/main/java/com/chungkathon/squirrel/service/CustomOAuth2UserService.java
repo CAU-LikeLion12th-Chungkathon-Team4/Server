@@ -1,8 +1,9 @@
 package com.chungkathon.squirrel.service;
 
+import com.chungkathon.squirrel.config.JwtTokenProvider;
 import com.chungkathon.squirrel.domain.User;
-import com.chungkathon.squirrel.dto.SessionUser;
 import com.chungkathon.squirrel.repository.UserRepository;
+
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -16,6 +17,8 @@ import org.springframework.stereotype.Service;
 import com.chungkathon.squirrel.dto.OAuthAttributes;
 
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Service
@@ -23,6 +26,7 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
 
     private final UserRepository userRepository;
     private final HttpSession httpSession;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -47,9 +51,17 @@ public class CustomOAuth2UserService implements OAuth2UserService<OAuth2UserRequ
         // 사용자 저장 또는 업데이트
         User user = saveOrUpdate(attributes);
 
-        // 세션에 사용자 정보 저장
-        httpSession.setAttribute("user", new SessionUser(user));
+        // JWT 토큰 생성
+        String accessToken = jwtTokenProvider.generateToken(user.getEmail());
 
+
+        // 세션 대신 JWT 토큰을 사용하도록 세션 저장 제거 및 토큰 반환
+        Map<String, Object> additionalAttributes = new HashMap<>(attributes.getAttributes());
+        additionalAttributes.put("accessToken", accessToken);
+
+//        // 세션에 사용자 정보 저장
+//        httpSession.setAttribute("user", new SessionUser(user));
+//
         return new DefaultOAuth2User(
                 Collections.singleton(new SimpleGrantedAuthority(user.getRoleKey())),
                 attributes.getAttributes(),
