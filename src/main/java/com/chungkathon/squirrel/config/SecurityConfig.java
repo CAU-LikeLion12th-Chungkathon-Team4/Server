@@ -10,7 +10,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
+import com.chungkathon.squirrel.config.JwtTokenProvider;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -21,6 +23,8 @@ import java.util.Collections;
 public class SecurityConfig {
 
     private final CustomOAuth2UserService customOAuth2UserService;
+    private final JwtAuthFilter jwtAuthFilter;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -40,16 +44,19 @@ public class SecurityConfig {
                 .logout( // 로그아웃 성공 시 / 주소로 이동
                         (logoutConfig) -> logoutConfig.logoutSuccessUrl("/")
                 )
-                // OAuth2 로그인 기능에 대한 여러 설정
-                .oauth2Login(Customizer.withDefaults()); // 아래 코드와 동일한 결과
-        /*
-                .oauth2Login(
-                        (oauth) ->
-                            oauth.userInfoEndpoint(
-                                    (endpoint) -> endpoint.userService(customOAuth2UserService)
-                            )
+                .oauth2Login(oauth -> oauth
+                        .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)) // OAuth2 로그인 후 사용자 정보 설정
+                        .successHandler((request, response, authentication) -> {
+                            // OAuth2 로그인 성공 시 JWT 토큰을 생성하여 헤더에 추가
+                            String token = jwtTokenProvider.generateToken(authentication.getName());
+                            System.out.println("Generated Token: " + token);  // 토큰 생성 확인을 위한 로그
+                            response.addHeader("Authorization", "Bearer " + token); // 헤더에 JWT 토큰 추가
+                            response.getWriter().write("{\"accessToken\": \"" + token + "\"}"); // JSON 형태로 토큰 반환
+                        })
                 );
-        */
+
+        // JWT 필터를 설정하여 인증을 처리하도록 설정
+        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

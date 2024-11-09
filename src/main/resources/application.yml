@@ -22,7 +22,7 @@ spring:
 
 #  # RDS
   profiles:
-    include: SECRET-KEY
+    include: jwt, SECRET-KEY
 
   security:
     oauth2:
@@ -63,3 +63,7 @@ spring:
     endpoint:
       health:
         show-details: always
+
+# jwt
+jwt:
+  secret-key:${jwt-secret-key}
