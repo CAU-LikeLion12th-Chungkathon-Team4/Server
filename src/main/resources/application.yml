@@ -67,5 +67,6 @@ spring:
         show-details: always
 
 server:
+  forward-headers-strategy: native
   port: 8080
 
