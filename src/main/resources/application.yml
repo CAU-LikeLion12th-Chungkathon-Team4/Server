@@ -22,7 +22,7 @@ spring:
 
 #  # RDS
   profiles:
-    include: jwt, SECRET-KEY
+    include: jwt, server, SECRET-KEY
 
   security:
     oauth2:

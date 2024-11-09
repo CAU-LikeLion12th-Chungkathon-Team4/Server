@@ -39,6 +39,8 @@ out/
 ### SECRET-KEY ###
 src/main/resources/application-SECRET-KEY.properties
 src/main/resources/application-jwt.yml
+src/main/resources/application-server.yml
+src/main/resources/bootsecurity.p12
 
 ### bfg ###
 bfg-1.14.0.jar
