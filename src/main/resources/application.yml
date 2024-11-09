@@ -64,6 +64,6 @@ spring:
       health:
         show-details: always
 
-# jwt
-jwt:
-  secret-key:${jwt-secret-key}
+server:
+  port: 8080
+
