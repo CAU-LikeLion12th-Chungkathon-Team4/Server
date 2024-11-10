@@ -31,8 +31,8 @@ public class LoginController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
-    // String redirectUri = "https://photori.n-e.kr/login/oauth2/code/google";  // 배포
-    String redirectUri = "http://localhost:8080/login/oauth2/code/google";  // 로컬
+    String redirectUri = "https://photori.n-e.kr/login/oauth2/code/google";  // 배포
+    // String redirectUri = "http://localhost:8080/login/oauth2/code/google";  // 로컬
 
     // 구글에서 받은 인가 코드로 액세스 토큰을 요청하고 JWT 토큰을 생성하는 메서드
     @GetMapping("/oauth2/code/google")
