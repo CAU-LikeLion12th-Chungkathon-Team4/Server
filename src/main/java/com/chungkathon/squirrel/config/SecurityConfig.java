@@ -68,7 +68,10 @@ public class SecurityConfig {
             CorsConfiguration configuration = new CorsConfiguration();
 
             configuration.setAllowedMethods(Collections.singletonList("*"));        // 모든 HTTP 메서드를 허용
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));        // 3000번 포트 열기
+            configuration.setAllowedOrigins(Arrays.asList(
+                    "http://localhost:3000",
+                    "https://photori.netlify.app"
+            ));        // 3000번 포트 열기
             configuration.setAllowedHeaders(Collections.singletonList("*"));        // 모든 요청 헤더를 허용
             configuration.setAllowCredentials(true);        // 쿠키와 같은 자격 증명 정보를 허용
             configuration.setMaxAge(3600L);     // 캐시 시간을 3600초로 설정

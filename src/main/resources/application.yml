@@ -33,8 +33,10 @@ spring:
             client-secret: ${oauth-client-pw}
             scope: ["email", "profile"]
             redirect-uri:
-              - "http://localhost:8080/login/oauth2/code/google"
-              - "https://photori.n-e.kr/login/oauth2/code/google"
+              - "http://localhost:8080/login/oauth2/code/google"    # 백 로컬
+              - "https://photori.n-e.kr/login/oauth2/code/google"   # 백 배포
+              - "http://localhost:3000/oauth"     # 프론트 로컬
+              - "https://photori.netlify.app/oauth"     # 프론트 배포
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
