@@ -47,16 +47,9 @@ public class SecurityConfig {
                 .oauth2Login(oauth -> oauth
                         .userInfoEndpoint(userInfo -> userInfo.userService(customOAuth2UserService)) // OAuth2 로그인 후 사용자 정보 설정
                         .successHandler((request, response, authentication) -> {
-                            // OAuth2 로그인 성공 시 JWT 토큰을 생성하여 헤더에 추가
-                            String token = jwtTokenProvider.generateToken(authentication.getName());
-                            System.out.println("Generated Token: " + token);  // 토큰 생성 확인을 위한 로그
-                            response.addHeader("Authorization", "Bearer " + token); // 헤더에 JWT 토큰 추가
-                            response.getWriter().write("{\"accessToken\": \"" + token + "\"}"); // JSON 형태로 토큰 반환
+                            response.getWriter().write("{\"message\": \"" + "success" + "\"}"); // JSON 형태로 토큰 반환
                         })
                 );
-
-        // JWT 필터를 설정하여 인증을 처리하도록 설정
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -64,9 +57,7 @@ public class SecurityConfig {
     // cors 설정
     private static void corsAllow(CorsConfigurer<HttpSecurity> corsCustomizer) {
         corsCustomizer.configurationSource(request -> {
-
             CorsConfiguration configuration = new CorsConfiguration();
-
             configuration.setAllowedMethods(Collections.singletonList("*"));        // 모든 HTTP 메서드를 허용
             configuration.setAllowedOrigins(Arrays.asList(
                     "http://localhost:3000",
@@ -77,7 +68,6 @@ public class SecurityConfig {
             configuration.setAllowedHeaders(Collections.singletonList("*"));        // 모든 요청 헤더를 허용
             configuration.setAllowCredentials(true);        // 쿠키와 같은 자격 증명 정보를 허용
             configuration.setMaxAge(3600L);     // 캐시 시간을 3600초로 설정
-
             return configuration;
         });
     }

@@ -31,13 +31,12 @@ public class LoginController {
 
     @Value("${spring.security.oauth2.client.registration.google.client-secret}")
     private String clientSecret;
-    String redirectUri = "https://photori.n-e.kr/login/oauth2/code/google";  // 배포
-    // String redirectUri = "http://localhost:8080/login/oauth2/code/google";  // 로컬
+    // String redirectUri = "https://photori.n-e.kr/login/oauth2/code/google";  // 배포
+    String redirectUri = "http://localhost:8080/login/oauth2/code/google";  // 로컬
 
     // 구글에서 받은 인가 코드로 액세스 토큰을 요청하고 JWT 토큰을 생성하는 메서드
     @GetMapping("/oauth2/code/google")
     public ResponseEntity<String> oauth2Login(@RequestParam("code") String authorizationCode) {
-
         // 구글 토큰 엔드포인트 URL
         String googleTokenUrl = "https://oauth2.googleapis.com/token";
 
@@ -60,17 +59,10 @@ public class LoginController {
         // 액세스 토큰을 응답에서 추출
         String accessToken = extractAccessToken(response.getBody());
 
-        // 액세스 토큰을 사용하여 사용자 정보 가져오기 (이메일, 이름, 사진 등)
-        UserInfo userInfo = getUserInfoFromAccessToken(accessToken);
-
-        // JWT 토큰 생성 (구글에서 받은 이메일을 사용)
-        String jwtToken = jwtTokenProvider.generateToken(userInfo.getEmail());
-
-        // JWT 토큰을 클라이언트에 반환
-        return ResponseEntity.ok()
-                .header("Authorization", "Bearer " + jwtToken)
-                .body("User info: " + userInfo.toString());
+        // 액세스 토큰을 클라이언트에 반환
+        return ResponseEntity.ok().body(accessToken);  // JWT 없이 access_token만 반환
     }
+
 
     // 액세스 토큰에서 이메일, 이름, 사진을 추출하는 메서드
     private UserInfo getUserInfoFromAccessToken(String accessToken) {
@@ -103,10 +95,17 @@ public class LoginController {
 
     // 구글 응답에서 액세스 토큰을 추출하는 메서드
     private String extractAccessToken(String responseBody) {
-        // 실제로는 JSON 파싱을 통해 access_token을 추출
-        // 예시: {"access_token":"ya29.a0ARrdaM9A0...wFm", "expires_in":3600, "token_type":"Bearer"}
-        String token = responseBody.split("\"access_token\":\"")[1].split("\"")[0];
-        return token;
+        try {
+            // Jackson ObjectMapper를 사용하여 응답을 JSON 객체로 파싱
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode root = objectMapper.readTree(responseBody);
+
+            // access_token 값을 추출
+            return root.get("access_token").asText();
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("Failed to parse access token", e);
+        }
     }
 
 }
