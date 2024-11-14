@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Setter
 @NoArgsConstructor
 public class QuizCreateRequestDto {
+    private Long quiz_id;
     private String question;
     private boolean answer;
 

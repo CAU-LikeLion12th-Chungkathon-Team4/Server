@@ -31,7 +31,24 @@ public class Quiz {
         this.answer = answer;
     }
 
+
+    public Long getId() {
+        return this.quiz_id;
+    }
+
+    public String getQuestion() {
+        return this.question;
+    }
+
     public boolean getAnswer() {
         return this.answer;
     }
+
+//    public void setDotoriCollection(DotoriCollection dotoriCollection) {
+//        this.dotoriCollection = dotoriCollection;
+//    }
+
+//    public void setDotoriCollection(DotoriCollection dotoriCollection) {
+//        this.dotoriCollection = dotoriCollection;
+//    }
 }

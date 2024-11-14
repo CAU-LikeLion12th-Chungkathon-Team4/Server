@@ -1,6 +1,5 @@
 package com.chungkathon.squirrel.service;
 
-import com.chungkathon.squirrel.controller.QuizController;
 import com.chungkathon.squirrel.domain.Quiz;
 import com.chungkathon.squirrel.domain.QuizReply;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
@@ -24,13 +23,13 @@ public class QuizService {
     }
 
     @Transactional
-    public boolean createQuiz(QuizCreateRequestDto requestDto) {
+    public Quiz createQuiz(QuizCreateRequestDto requestDto) {
         Quiz quiz = Quiz.builder()
                 .question(requestDto.getQuestion())
                 .answer(requestDto.getAnswer())
                 .build();
-        quizJpaRepository.save(quiz);
-        return quiz.getAnswer();
+        return quizJpaRepository.save(quiz);
+//        return quiz;
     }
 
     @Transactional
@@ -43,19 +42,14 @@ public class QuizService {
     }
 
     @Transactional
-    public boolean checkQuizReply(Long quiz_id, QuizReplyCreateRequestDto responseDto) {
+    public boolean checkQuizReply(Long quiz_id, QuizReplyCreateRequestDto requestDto) {
         Quiz quiz = quizJpaRepository.findById(quiz_id)
                 .orElseThrow(() -> new RuntimeException("해당 ID를 가진 퀴즈를 찾을 수 없습니다."));
-
-        QuizReply quizreply = QuizReply.builder()
+        QuizReply quizReply = QuizReply.builder()
                 .quiz(quiz)
-                .reply(responseDto.getReply())
+                .reply(requestDto.getReply())
                 .build();
-        quizReplyJpaRepository.save(quizreply);
-
-        boolean isCorrect = quiz.getAnswer() == quizreply.getReply();
-
+        boolean isCorrect = quiz.getAnswer() == quizReply.getReply();
         return isCorrect;
     }
-
 }

@@ -16,7 +16,7 @@ public class QuizReply {
     @GeneratedValue(strategy = IDENTITY)
     private Long quiz_reply_id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "quiz_id")
     private Quiz quiz;
 

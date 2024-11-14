@@ -1,5 +1,6 @@
 package com.chungkathon.squirrel.controller;
 
+import com.chungkathon.squirrel.domain.Quiz;
 import com.chungkathon.squirrel.dto.request.QuizCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
 import com.chungkathon.squirrel.service.QuizService;
@@ -15,7 +16,7 @@ public class QuizController {
     }
 
     @PostMapping("/create")
-    public boolean createQuiz(@RequestBody QuizCreateRequestDto RequestDto) {
+    public Quiz createQuiz(@RequestBody QuizCreateRequestDto RequestDto) {
         return quizService.createQuiz(RequestDto);
     }
 
