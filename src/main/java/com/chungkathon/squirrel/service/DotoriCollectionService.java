@@ -40,9 +40,10 @@ public class DotoriCollectionService {
                 .quiz(quiz)
                 .build();
 
-//        quiz.setDotoriCollection(dotoriCollection);
-        quizJpaRepository.save(quiz);
+        quiz.setDotoriCollection(dotoriCollection);
         dotoriCollectionJpaRepository.save(dotoriCollection);
+        quizJpaRepository.save(quiz);
+
 
         return dotoriCollection;
     }

@@ -26,9 +26,10 @@ public class Quiz {
     private boolean answer;
 
     @Builder
-    public Quiz(String question, boolean answer) {
+    public Quiz(String question, boolean answer, DotoriCollection dotoriCollection) {
         this.question = question;
         this.answer = answer;
+        this.dotoriCollection = dotoriCollection;
     }
 
 
@@ -48,7 +49,7 @@ public class Quiz {
 //        this.dotoriCollection = dotoriCollection;
 //    }
 
-//    public void setDotoriCollection(DotoriCollection dotoriCollection) {
-//        this.dotoriCollection = dotoriCollection;
-//    }
+    public void setDotoriCollection(DotoriCollection dotoriCollection) {
+        this.dotoriCollection = dotoriCollection;
+    }
 }
