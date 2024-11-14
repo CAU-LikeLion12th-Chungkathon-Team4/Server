@@ -32,4 +32,12 @@ public class QuizReply {
     public boolean getReply(){
         return this.reply;
     }
+
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
+    }
+
+    public void setReply(boolean reply) {
+        this.reply = reply;
+    }
 }
