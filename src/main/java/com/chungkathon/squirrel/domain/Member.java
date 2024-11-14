@@ -16,12 +16,18 @@ public class Member {
     private Long id;
 
     @Builder
-    public Member(String username, String password, String email, int age) {
+    public Member(String username, String password, String nickname, int squirrel_type) {
         this.username = username;
         this.password = password;
+        this.nickname = nickname;
+        this.squirrel_type = squirrel_type;
     }
 
     @Column(nullable = false)
-    private String username;
-    private String password;
+    private String username;        // 사용자 아이디
+
+    private String password;        // 사용자 비밀번호
+    private String nickname;        // 사용자 다람쥐 닉네임
+    private int squirrel_type;      // 사용자 다람쥐 타입
+    private String url_rnd;         // 사용자 다람쥐 url
 }

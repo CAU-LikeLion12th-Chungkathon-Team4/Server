@@ -5,9 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class JoinRequest {
+public class LoginRequest {
     private String username;
     private String password;
-    private String nickname;
-    private int squirrel_type;
 }

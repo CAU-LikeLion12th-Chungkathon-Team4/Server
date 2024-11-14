@@ -2,6 +2,7 @@ package com.chungkathon.squirrel.service;
 
 import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.dto.request.JoinRequest;
+import com.chungkathon.squirrel.dto.request.LoginRequest;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -47,19 +48,21 @@ public class MemberService {
         Member member = Member.builder()
                 .username(joinRequest.getUsername())
                 .password(bCryptPasswordEncoder.encode(joinRequest.getPassword()))
+                .nickname(joinRequest.getNickname())
+                .squirrel_type(joinRequest.getSquirrel_type())
                 .build();
         return memberJpaRepository.save(member);
     }
 
-    public Member login(JoinRequest joinRequest) {
-        Member member = memberJpaRepository.findByUsername(joinRequest.getUsername())
+    public Member login(LoginRequest loginRequest) {
+        Member member = memberJpaRepository.findByUsername(loginRequest.getUsername())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         if (member == null) {
             return null;
         }
 
-        if (!bCryptPasswordEncoder.matches(joinRequest.getPassword(), member.getPassword())) {
+        if (!bCryptPasswordEncoder.matches(loginRequest.getPassword(), member.getPassword())) {
             return null;
         }
 

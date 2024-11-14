@@ -2,6 +2,7 @@ package com.chungkathon.squirrel.controller;
 
 import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.dto.request.JoinRequest;
+import com.chungkathon.squirrel.dto.request.LoginRequest;
 import com.chungkathon.squirrel.dto.response.TokenResponse;
 import com.chungkathon.squirrel.jwt.JwtTokenProvider;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
@@ -32,8 +33,8 @@ public class JoinController {
     }
 
     @PostMapping("/login")
-    public TokenResponse login(@RequestBody JoinRequest joinRequest) {
-        Member member = memberService.login(joinRequest);
+    public TokenResponse login(@RequestBody LoginRequest loginRequest) {
+        Member member = memberService.login(loginRequest);
         return TokenResponse.of(jwtTokenProvider.generateAccessToken(member.getUsername()), jwtTokenProvider.generateRefreshToken(member.getUsername()));
     }
 }
