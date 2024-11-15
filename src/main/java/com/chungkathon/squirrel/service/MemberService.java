@@ -39,6 +39,23 @@ public class MemberService {
     private final BCryptPasswordEncoder bCryptPasswordEncoder; // 비밀번호 인코더 DI
 
     public Member join(JoinRequest joinRequest) {
+
+        String username = joinRequest.getUsername();
+        String password = joinRequest.getPassword();
+
+        // 아이디와 비밀번호 검증: 알파벳, 숫자, 특수문자만 허용 + 길이 제한
+        String pattern = "^[a-zA-Z0-9]{1,12}$";
+
+        // ID 검증: 알파벳, 숫자, 특수문자 허용 + 최대 12자
+        if (!username.matches(pattern)) {
+            throw new IllegalArgumentException("아이디는 알파벳, 숫자로만 구성되어야 하며, 12자 이내여야 합니다.");
+        }
+
+        // 비밀번호 검증: 알파벳, 숫자, 특수문자 포함 + 최대 12자
+        if (!password.matches(pattern)) {
+            throw new IllegalArgumentException("비밀번호는 알파벳, 숫자, 특수문자(!@#$%^&*()_+)로만 구성되어야 하며, 12자 이내여야 합니다.");
+        }
+
         // 이미 존재하는 사용자 처리 (예외 처리 추가 가능)
         if (memberJpaRepository.existsByUsername(joinRequest.getUsername())) {
             throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
@@ -46,8 +63,8 @@ public class MemberService {
 
         // 회원 생성 및 저장
         Member member = Member.builder()
-                .username(joinRequest.getUsername())
-                .password(bCryptPasswordEncoder.encode(joinRequest.getPassword()))
+                .username(username)
+                .password(bCryptPasswordEncoder.encode(password))
                 .nickname(joinRequest.getNickname())
                 .squirrel_type(joinRequest.getSquirrel_type())
                 .build();
@@ -56,7 +73,7 @@ public class MemberService {
 
     public Member login(LoginRequest loginRequest) {
         Member member = memberJpaRepository.findByUsername(loginRequest.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 사용자입니다."));
 
         if (member == null) {
             return null;
