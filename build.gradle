@@ -36,6 +36,15 @@ dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
 	// healthcheck
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
+	//Spring Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// OAuth2
+	implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+	implementation 'org.springframework.security:spring-security-oauth2-client'
+	// jwt
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+	implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2' // JSON 직렬화 용도
 }
 
 tasks.named('test') {
