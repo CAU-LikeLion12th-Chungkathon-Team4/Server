@@ -6,6 +6,7 @@ import com.chungkathon.squirrel.domain.QuizReply;
 import com.chungkathon.squirrel.dto.request.DotoriCollectionCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
+import com.chungkathon.squirrel.dto.response.DotoriCollectionResponseDto;
 import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
 import com.chungkathon.squirrel.repository.QuizJpaRepository;
 import com.chungkathon.squirrel.repository.QuizReplyJpaRepository;
@@ -73,8 +74,8 @@ public class DotoriCollectionService {
         }
 
         QuizReply quizReply = new QuizReply(quiz, requestDto.getReply());
-        quizReply.setQuiz(quiz);
-        quizReply.setReply(requestDto.getReply());
+//        quizReply.setQuiz(quiz);
+//        quizReply.setReply(requestDto.getReply());
         quizReplyJpaRepository.save(quizReply);
 
         boolean isCorrect = quizService.checkQuizReply(dotoriCollection.getId() , requestDto);
@@ -82,9 +83,9 @@ public class DotoriCollectionService {
         if (isCorrect) {
             dotoriCollection.setLock(false);
         }
-        else {
-            dotoriCollectionJpaRepository.delete(dotoriCollection);
-        }
+//        else {
+//            dotoriCollectionJpaRepository.delete(dotoriCollection);
+//        }
         return isCorrect;
     }
 
@@ -92,8 +93,15 @@ public class DotoriCollectionService {
     public DotoriCollection getDotoriCollection(Long dotori_collection_id){
         DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
                 .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
-//        Quiz quiz = quizJpaRepository.findById(dotoriCollection.getQuizId())
-//                .orElseThrow(() -> new RuntimeException("해당 ID를 가진 퀴즈가 없습니다."));
+
         return dotoriCollection;
+    }
+
+    @Transactional
+    public void deleteDotoriCollection(Long dotori_collection_id) {
+        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
+                .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
+//        DotoriCollection dotoriCollection = getDotoriCollection(dotori_collection_id);
+        dotoriCollectionJpaRepository.delete(dotoriCollection);
     }
 }

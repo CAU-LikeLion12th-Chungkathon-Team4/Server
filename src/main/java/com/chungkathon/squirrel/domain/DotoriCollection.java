@@ -48,6 +48,10 @@ public class DotoriCollection extends BaseTimeEntity {
         return this.dotori_collection_id;
     }
 
+    public Object getMessage() {
+        return this.message;
+    }
+
 //    public Long getQuizId() {
 //        return this.quiz != null ? this.quiz.getId() : null;
 //        // return this.quiz.getId();

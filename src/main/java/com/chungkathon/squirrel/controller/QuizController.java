@@ -25,7 +25,7 @@ public class QuizController {
         return quizService.createQuizReply(RequestDto);
     }
 
-    @GetMapping("/{quiz_id}/check")
+    @GetMapping("/{quiz_id}/chek")
     public boolean checkQuizReply(@PathVariable Long quiz_id, QuizReplyCreateRequestDto responseDto) {
         boolean check = quizService.checkQuizReply(quiz_id, responseDto);
         return check;
