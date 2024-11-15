@@ -31,7 +31,12 @@ public class SecurityConfig {
     private static final String[] AUTH_WHILE_LIST = {
             "/join",
             "/login",
-            "/api/v1/check"
+            "/api/v1/check",
+            "/{urlRnd}"
+    };
+
+    private static final String[] AUTH_USER_LIST = {
+            "/user"
     };
 
     @Bean
@@ -44,6 +49,8 @@ public class SecurityConfig {
                 .formLogin(AbstractHttpConfigurer::disable) // 기본 로그인 페이지 없애기
                 .authorizeHttpRequests((auth) -> {
                     auth.requestMatchers(AUTH_WHILE_LIST).permitAll(); // 해당 uri에선 다 허용
+                    auth.requestMatchers(AUTH_USER_LIST).authenticated(); // 인증된 사용자만 접근 가능
+                    auth.requestMatchers("/{urlRnd:[a-zA-Z0-9\\-]+}").permitAll(); // 동적 경로는 마지막에 허용
                     auth.anyRequest().authenticated();
                 })
 //                .formLogin(Customizer.withDefaults())
@@ -70,7 +77,8 @@ public class SecurityConfig {
             CorsConfiguration configuration = new CorsConfiguration();
 
             configuration.setAllowedMethods(Collections.singletonList("*"));
-            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000"));
+            configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000",
+                    "https://photori.netlify.app"));
             configuration.setAllowedHeaders(Collections.singletonList("*"));
             configuration.setAllowCredentials(true);
             configuration.setMaxAge(3600L);

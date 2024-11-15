@@ -23,6 +23,8 @@ import static com.chungkathon.squirrel.jwt.JwtValidationType.VALID_JWT;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private static final String[] EXCLUDED_PATHS = {"/join", "/login", "/api/v1/check"};
+    private static final String DYNAMIC_PATH_PATTERN = "^/[a-zA-Z0-9\\-]+$";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -31,7 +33,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestURI = request.getRequestURI();
 
         // 특정 경로는 필터를 건너뛰기
-        if (requestURI.equals("/join") || requestURI.equals("/login") || requestURI.equals("/api/v1/check")) {
+        if (isExcludedPath(requestURI) || isDynamicPath(requestURI)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -59,5 +61,19 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return bearerToken.substring("Bearer ".length());
         }
         return null;
+    }
+
+    private boolean isExcludedPath(String requestURI) {
+        for (String path : EXCLUDED_PATHS) {
+            if (path.equals(requestURI)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean isDynamicPath(String requestURI) {
+        // 정규식으로 동적 경로 확인
+        return requestURI.matches(DYNAMIC_PATH_PATTERN);
     }
 }
