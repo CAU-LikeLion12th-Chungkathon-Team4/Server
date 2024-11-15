@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private static final String[] EXCLUDED_PATHS = {"/join", "/login", "/api/v1/check"};
-    private static final String DYNAMIC_PATH_PATTERN = "^/[a-zA-Z0-9\\-]+$";
+    private static final String DYNAMIC_PATH_PATTERN = "^/dynamic/[a-zA-Z0-9\\-]+$";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
