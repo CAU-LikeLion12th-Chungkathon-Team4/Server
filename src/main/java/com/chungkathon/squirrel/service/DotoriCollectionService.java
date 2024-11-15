@@ -41,6 +41,7 @@ public class DotoriCollectionService {
                 .sender(requestDto.getSender())
                 .message(requestDto.getMessage())
                 .lock(true)
+                .deleted(false)
                 .dotori_num(Math.min(7, Math.max(1, requestDto.getDotori_num())))
                 .quiz(quiz)
                 .build();
@@ -80,12 +81,12 @@ public class DotoriCollectionService {
 
         boolean isCorrect = quizService.checkQuizReply(dotoriCollection.getId() , requestDto);
 
-        if (isCorrect) {
-            dotoriCollection.setLock(false);
+        if (isCorrect) { // 퀴즈 정답과 응답이 일치하면
+            dotoriCollection.setLock(false); // 도토리 주머니 잠금 해제
         }
-//        else {
-//            dotoriCollectionJpaRepository.delete(dotoriCollection);
-//        }
+        else { // 퀴즈 정답과 응답이 불일치하면
+            dotoriCollection.setDeleted(true); // 도토리 주머니 삭제
+        }
         return isCorrect;
     }
 

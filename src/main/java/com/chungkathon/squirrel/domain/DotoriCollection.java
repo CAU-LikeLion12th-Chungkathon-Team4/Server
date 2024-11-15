@@ -29,6 +29,9 @@ public class DotoriCollection extends BaseTimeEntity {
     private boolean lock;
 
     @NotNull
+    private boolean deleted;
+
+    @NotNull
     private int dotori_num;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -36,10 +39,11 @@ public class DotoriCollection extends BaseTimeEntity {
     private Quiz quiz;
 
     @Builder
-    public DotoriCollection(String sender, String message, boolean lock, int dotori_num, Quiz quiz) {
+    public DotoriCollection(String sender, String message, boolean lock, boolean deleted, int dotori_num, Quiz quiz) {
         this.sender = sender;
         this.message = message;
         this.lock = lock;
+        this.deleted = deleted;
         this.dotori_num = dotori_num;
         this.quiz = quiz;
     }
@@ -63,5 +67,9 @@ public class DotoriCollection extends BaseTimeEntity {
 
     public void setLock(boolean b) {
         this.lock = b;
+    }
+
+    public void setDeleted(boolean b) {
+        this.deleted = b;
     }
 }

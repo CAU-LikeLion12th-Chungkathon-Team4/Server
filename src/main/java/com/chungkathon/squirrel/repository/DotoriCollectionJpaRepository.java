@@ -10,4 +10,6 @@ import java.util.Optional;
 public interface DotoriCollectionJpaRepository extends JpaRepository<DotoriCollection, Long> {
 //    @Override
     Optional<DotoriCollection> findById(Long Long);
+    @Query("SELECT d FROM DotoriCollection d WHERE d.deleted = false")
+    List<DotoriCollection> findAllActiveDotoriCollections();
 }
