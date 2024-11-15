@@ -3,11 +3,15 @@ package com.chungkathon.squirrel.service;
 import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.dto.request.JoinRequest;
 import com.chungkathon.squirrel.dto.request.LoginRequest;
+import com.chungkathon.squirrel.dto.response.MemberResponse;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
+import com.chungkathon.squirrel.util.URLGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,22 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MemberService {
     private final MemberJpaRepository memberJpaRepository;
-
-    // 특정 페이지 단위로 페이징 처리하여 조회
-    public Page<Member> getMemberByPage(int page, int size) {
-        // PageRequest 객체를 생성하여 페이징 정보와 정렬 조건(오름차순)을 지정
-        PageRequest pageable = PageRequest.of(page, size, Sort.by("username").ascending());
-        return memberJpaRepository.findAll(pageable);
-    }
-
-    public void printMembersByPage(int page, int size) {
-        Page<Member> memberPage = getMemberByPage(page, size);
-        List<Member> members = memberPage.getContent();
-
-        for (Member member : members) {
-            System.out.println("ID: " + member.getId() + ", Username: " + member.getUsername());
-        }
-    }
 
     // 회원가입 로직 작성
     private final BCryptPasswordEncoder bCryptPasswordEncoder; // 비밀번호 인코더 DI
@@ -61,12 +49,15 @@ public class MemberService {
             throw new IllegalArgumentException("이미 존재하는 사용자입니다.");
         }
 
+        String url_rnd = URLGenerator.generateURL();
+
         // 회원 생성 및 저장
         Member member = Member.builder()
                 .username(username)
                 .password(bCryptPasswordEncoder.encode(password))
                 .nickname(joinRequest.getNickname())
                 .squirrel_type(joinRequest.getSquirrel_type())
+                .urlRnd(url_rnd)
                 .build();
         return memberJpaRepository.save(member);
     }
@@ -84,5 +75,35 @@ public class MemberService {
         }
 
         return member;
+    }
+
+    public Member getMemberByUrlRnd(String urlRnd) {
+        return memberJpaRepository.findByUrlRnd(urlRnd)
+                .orElseThrow(() -> new IllegalArgumentException("해당 URL에 해당하는 사용자가 없습니다."));
+    }
+
+    public MemberResponse getLoggedInMember() {
+        // SecurityContext에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalArgumentException("로그인된 사용자가 없습니다.");
+        }
+
+        // Principal에서 사용자 이름 가져오기
+        String username = authentication.getName();
+
+        // 사용자 이름으로 Member 엔티티 조회
+        Member member = memberJpaRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+
+        // DTO 형식 반환
+        return new MemberResponse(
+                member.getId(),
+                member.getUsername(),
+                member.getNickname(),
+                member.getSquirrel_type(),
+                member.getUrlRnd()
+        );
     }
 }

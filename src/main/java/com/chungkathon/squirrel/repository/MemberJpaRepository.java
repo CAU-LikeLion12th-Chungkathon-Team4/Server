@@ -20,4 +20,7 @@ public interface MemberJpaRepository extends JpaRepository<Member, Long> {
 
     // Username 중복 검사 쿼리
     boolean existsByUsername(String username);
+
+    // URL 난수를 이용하여 사용자의 정보를 조회하기
+    Optional<Member> findByUrlRnd(String urlRnd);
 }
