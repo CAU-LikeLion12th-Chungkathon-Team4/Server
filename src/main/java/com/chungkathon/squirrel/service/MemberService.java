@@ -56,7 +56,7 @@ public class MemberService {
                 .username(username)
                 .password(bCryptPasswordEncoder.encode(password))
                 .nickname(joinRequest.getNickname())
-                .squirrel_type(joinRequest.getSquirrel_type())
+                .squirrelType(joinRequest.getSquirrelType())
                 .urlRnd(url_rnd)
                 .build();
         return memberJpaRepository.save(member);
@@ -102,7 +102,7 @@ public class MemberService {
                 member.getId(),
                 member.getUsername(),
                 member.getNickname(),
-                member.getSquirrel_type(),
+                member.getSquirrelType(),
                 member.getUrlRnd()
         );
     }

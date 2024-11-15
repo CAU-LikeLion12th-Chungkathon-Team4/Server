@@ -1,5 +1,6 @@
 package com.chungkathon.squirrel.dto.request;
 
+import com.chungkathon.squirrel.domain.SquirrelType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,5 +10,5 @@ public class JoinRequest {
     private String username;
     private String password;
     private String nickname;
-    private int squirrel_type;
+    private SquirrelType squirrelType;
 }
