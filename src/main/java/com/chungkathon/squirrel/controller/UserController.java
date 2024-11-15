@@ -20,7 +20,7 @@ public class UserController {
         return ResponseEntity.ok(memberResponse);
     }
 
-    @GetMapping("/{urlRnd}")
+    @GetMapping("/dynamic/{urlRnd}")
     public void getMemberByUrl(@PathVariable String urlRnd) {
     }
 }
