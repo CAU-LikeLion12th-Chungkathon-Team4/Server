@@ -56,13 +56,6 @@ public class DotoriCollectionController {
         return dotoriCollectionService.createDotoriCollection(urlRnd, requestDto);
     }
 
-    // 잠금 해제 전 퀴즈 제공
-
-//    @GetMapping("/get/{dotori_collection_id}/quiz") // /{dotori_collection_id}/quiz
-//    public Quiz getQuiz(@PathVariable Long dotori_collection_id) {
-//        return dotoriCollectionService.getQuiz(dotori_collection_id);
-//    }
-
     @GetMapping("/{dotori_collection_id}/quiz")
     public ResponseEntity<?> getQuizByDotoriCollectionId(@PathVariable Long dotori_collection_id) {
         DotoriCollection dotoriCollection = dotoriCollectionService.getDotoriCollection(dotori_collection_id);
