@@ -23,11 +23,12 @@ import static com.chungkathon.squirrel.jwt.JwtValidationType.VALID_JWT;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
-    private static final String[] EXCLUDED_PATHS = {"/join", "/login", "/api/v1/check", "/join/check", "/dotori/upload"};
-    private static final String[] DYNAMIC_PATH_PATTERN = {"^/dynamic/[a-zA-Z0-9\\-]+$",
-            "^/dotoricollection/create/[a-zA-Z0-9\\-]+$",
-            "^/dotori/upload/[a-zA-Z0-9\\-]+$",
-            "^/dotori/get/[a-zA-Z0-9\\-]+$"};
+
+    private static final String[] EXCLUDED_PATHS = {"/join", "/login", "/api/v1/check", "/join/check", "/h2-console", "/dotori/upload"};
+    private static final String[] DYNAMIC_PATH_PATTERN = {"^/dynamic/[a-zA-Z0-9\\-]+$", "^/dotoricollection/[a-zA-Z0-9\\-]+$",
+            "^/dotoricollection/[a-zA-Z0-9\\-]+$/create", "^/dotoricollection/[a-zA-Z0-9\\-]+$/quiz",
+            "^/dotoricollection/[a-zA-Z0-9\\-]+$/reply", "/dotoricollection/[a-zA-Z0-9\\-]+$/open",
+            "^/dotori/upload/[a-zA-Z0-9\\-]+$", "^/dotori/get/[a-zA-Z0-9\\-]+$"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

@@ -13,7 +13,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -27,8 +30,28 @@ public class DotoriCollectionController {
         this.dotoriCollectionJpaRepository = dotoriCollectionJpaRepository;
     }
 
+    // 사용자별 도토리 주머니 모아보기 (삭제된 도토리 주머니 제외)
+    @GetMapping("/{urlRnd}")
+    public ResponseEntity<List<DotoriCollectionResponseDto>> getDotoriCollection(@PathVariable String urlRnd) {
+        List<DotoriCollection> dotoriCollections = dotoriCollectionService.getActiveDotoriCollections(urlRnd);
+
+        List<DotoriCollectionResponseDto> responseDtos = dotoriCollections.stream()
+                .map(collection -> new DotoriCollectionResponseDto(
+                        collection.getId(),
+                        collection.getSender(),
+                        collection.getMessage(),
+                        collection.isLock(),
+                        collection.isDeleted(),
+                        collection.getDotoriNum(),
+                        collection.getCreatedAt(),
+                        collection.getUpdatedAt()))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(responseDtos);
+    }
+
     // 도토리 주머니 생성
-    @PostMapping("/create/{urlRnd}")
+    @PostMapping("/{urlRnd}/create")
     public DotoriCollectionCreateDto createDotoriCollection(@PathVariable String urlRnd, @RequestBody DotoriCollectionCreateRequestDto requestDto) {
         return dotoriCollectionService.createDotoriCollection(urlRnd, requestDto);
     }
@@ -70,7 +93,7 @@ public class DotoriCollectionController {
     }
 
     // 도토리 주머니 열어보기
-    @GetMapping("/{dotori_collection_id}")
+    @GetMapping("/{dotori_collection_id}/open")
     public ResponseEntity<?> getDotoriCollection(@PathVariable Long dotori_collection_id) {
         DotoriCollection dotoriCollection = dotoriCollectionService.getDotoriCollection(dotori_collection_id);
 
@@ -89,7 +112,10 @@ public class DotoriCollectionController {
         DotoriCollectionResponseDto responseDto = new DotoriCollectionResponseDto(
                 dotoriCollection.getId(),
                 dotoriCollection.getSender(),
-                (String) dotoriCollection.getMessage()
+                (String) dotoriCollection.getMessage(),
+                dotoriCollection.getDotoriNum(),
+                dotoriCollection.getCreatedAt(),
+                dotoriCollection.getUpdatedAt()
         );
 
         return ResponseEntity.ok().body(responseDto);

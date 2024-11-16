@@ -52,7 +52,11 @@ public class SecurityConfig {
                     auth.requestMatchers(AUTH_WHILE_LIST).permitAll(); // 해당 uri에선 다 허용
                     auth.requestMatchers(AUTH_USER_LIST).authenticated(); // 인증된 사용자만 접근 가능
                     auth.requestMatchers("/dynamic/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll(); // 동적 경로는 마지막에 허용
-                    auth.requestMatchers("/dotoricollection/create/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll();
+                    auth.requestMatchers("/dotoricollection/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll();
+                    auth.requestMatchers("/dotoricollection/{urlRnd:[a-zA-Z0-9\\\\-]+}/create").permitAll();
+                    auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/open").permitAll();
+                    auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/quiz").permitAll();
+                    auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/reply").permitAll();
                     auth.requestMatchers("/dotori/get/{collectionId:[a-zA-Z0-9\\\\-]+}").permitAll();
                     auth.requestMatchers("/dotori/delete/{dotoriId:[a-zA-Z0-9\\\\-]+}").authenticated();
                     auth.anyRequest().authenticated();
