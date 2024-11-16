@@ -7,16 +7,20 @@ import com.chungkathon.squirrel.domain.QuizReply;
 import com.chungkathon.squirrel.dto.request.DotoriCollectionCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
+import com.chungkathon.squirrel.dto.response.DotoriCollectionCreateDto;
 import com.chungkathon.squirrel.dto.response.DotoriCollectionResponseDto;
+import com.chungkathon.squirrel.dto.response.MemberResponse;
 import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import com.chungkathon.squirrel.repository.QuizJpaRepository;
 import com.chungkathon.squirrel.repository.QuizReplyJpaRepository;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Getter
 public class DotoriCollectionService {
     @Autowired
     private DotoriCollectionJpaRepository dotoriCollectionJpaRepository;
@@ -35,7 +39,7 @@ public class DotoriCollectionService {
     }
 
     @Transactional
-    public DotoriCollection createDotoriCollection(String urlRnd, DotoriCollectionCreateRequestDto requestDto) {
+    public DotoriCollectionCreateDto createDotoriCollection(String urlRnd, DotoriCollectionCreateRequestDto requestDto) {
         QuizCreateRequestDto quizRequest = new QuizCreateRequestDto();
         quizRequest.setQuestion(requestDto.getQuestion());
         quizRequest.setAnswer(requestDto.getAnswer());
@@ -57,8 +61,25 @@ public class DotoriCollectionService {
         dotoriCollectionJpaRepository.save(dotoriCollection);
         quizJpaRepository.save(quiz);
 
+        DotoriCollectionCreateDto dotoriCollectionCreateDto = DotoriCollectionCreateDto.builder()
+                .id(dotoriCollection.getId())
+                .sender(dotoriCollection.getSender())
+                .message(dotoriCollection.getMessage())
+                .lock(dotoriCollection.isLock())
+                .deleted(dotoriCollection.isDeleted())
+                .dotoriNum(dotoriCollection.getDotori_num())
+                .createdAt(dotoriCollection.getCreatedAt()) // 날짜 값 매핑
+                .updatedAt(dotoriCollection.getUpdatedAt())
+                .member(MemberResponse.builder()
+                        .id(member.getId())
+                        .username(member.getUsername())
+                        .nickname(member.getNickname())
+                        .squirrelType(member.getSquirrelType())
+                        .urlRnd(member.getUrlRnd())
+                        .build())
+                .build();
 
-        return dotoriCollection;
+        return dotoriCollectionCreateDto;
     }
 
 //    @Transactional
