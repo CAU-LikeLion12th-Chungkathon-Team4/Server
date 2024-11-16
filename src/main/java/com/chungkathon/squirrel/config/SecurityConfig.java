@@ -54,6 +54,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/dynamic/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll(); // 동적 경로는 마지막에 허용
                     auth.requestMatchers("/dotoricollection/create/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll();
                     auth.requestMatchers("/dotori/get/{collectionId:[a-zA-Z0-9\\\\-]+}").permitAll();
+                    auth.requestMatchers("/dotori/delete/{dotoriId:[a-zA-Z0-9\\\\-]+}").authenticated();
                     auth.anyRequest().authenticated();
                 })
 //                .formLogin(Customizer.withDefaults())
