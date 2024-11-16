@@ -32,7 +32,8 @@ public class SecurityConfig {
             "/join",
             "/login",
             "/api/v1/check",
-            "/join/check"
+            "/join/check",
+            "/dotori/upload"
     };
 
     private static final String[] AUTH_USER_LIST = {
@@ -56,6 +57,8 @@ public class SecurityConfig {
                     auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/open").permitAll();
                     auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/quiz").permitAll();
                     auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/reply").permitAll();
+                    auth.requestMatchers("/dotori/get/{collectionId:[a-zA-Z0-9\\\\-]+}").permitAll();
+                    auth.requestMatchers("/dotori/delete/{dotoriId:[a-zA-Z0-9\\\\-]+}").authenticated();
                     auth.anyRequest().authenticated();
                 })
 //                .formLogin(Customizer.withDefaults())

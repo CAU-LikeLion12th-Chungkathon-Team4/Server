@@ -63,7 +63,7 @@ spring:
       path: /h2-console # H2 콘솔의 접근 경로
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
