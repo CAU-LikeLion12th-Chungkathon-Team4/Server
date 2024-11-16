@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private static final String[] EXCLUDED_PATHS = {"/join", "/login", "/api/v1/check", "/join/check"};
-    private static final String DYNAMIC_PATH_PATTERN = "^/dynamic/[a-zA-Z0-9\\-]+$";
+    private static final String[] DYNAMIC_PATH_PATTERN = {"^/dynamic/[a-zA-Z0-9\\-]+$", "^/dotoricollection/create/[a-zA-Z0-9\\-]+$"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
@@ -73,7 +73,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     private boolean isDynamicPath(String requestURI) {
-        // 정규식으로 동적 경로 확인
-        return requestURI.matches(DYNAMIC_PATH_PATTERN);
+        for (String pattern : DYNAMIC_PATH_PATTERN) {
+            if (requestURI.matches(pattern)) { // 정규식 매칭
+                return true;
+            }
+        }
+        return false;
     }
 }
