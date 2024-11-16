@@ -32,6 +32,11 @@ spring:
     init:
     mode: always # 애플리케이션 시작 시 스크립트 초기화 (기본값: embedded)
 
+  servlet:
+    multipart:
+      max-file-size: 10MB  # 업로드할 수 있는 단일 파일의 최대 크기
+      max-request-size: 20MB  # 요청 전체의 최대 크기
+
   #  # RDS
   #  profiles:
   #    include: SECRET-KEY
