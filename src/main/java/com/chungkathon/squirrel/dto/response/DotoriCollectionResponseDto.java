@@ -29,9 +29,12 @@ public class DotoriCollectionResponseDto {
         this.updatedAt = updatedAt;
     }
 
-    public DotoriCollectionResponseDto(Long dotori_collection_id, String sender, String message) {
+    public DotoriCollectionResponseDto(Long dotori_collection_id, String sender, String message, int dotori_num, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.dotori_collection_id = dotori_collection_id;
         this.sender = sender;
         this.message = message;
+        this.dotori_num = dotori_num;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

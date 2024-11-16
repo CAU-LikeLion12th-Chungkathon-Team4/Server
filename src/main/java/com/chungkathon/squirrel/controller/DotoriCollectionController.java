@@ -112,7 +112,10 @@ public class DotoriCollectionController {
         DotoriCollectionResponseDto responseDto = new DotoriCollectionResponseDto(
                 dotoriCollection.getId(),
                 dotoriCollection.getSender(),
-                (String) dotoriCollection.getMessage()
+                (String) dotoriCollection.getMessage(),
+                dotoriCollection.getDotoriNum(),
+                dotoriCollection.getCreatedAt(),
+                dotoriCollection.getUpdatedAt()
         );
 
         return ResponseEntity.ok().body(responseDto);
