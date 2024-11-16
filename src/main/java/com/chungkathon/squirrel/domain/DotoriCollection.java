@@ -7,6 +7,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.antlr.v4.runtime.misc.NotNull;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -37,9 +40,13 @@ public class DotoriCollection extends BaseTimeEntity {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "dotori_collection_id")
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "quiz_id")
     private Quiz quiz;
+
+    // 1:N 관계 설정
+    @OneToMany(mappedBy = "dotoriCollection", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Dotori> dotoriList = new ArrayList<>();
 
     @Builder
     public DotoriCollection(String sender, String message, boolean lock, boolean deleted, int dotori_num, Quiz quiz) {
@@ -79,4 +86,11 @@ public class DotoriCollection extends BaseTimeEntity {
     public void setMember(Member member) {
         this.member = member;
     }
+
+    // 도토리 추가 (양방향 관계를 고려)
+    public void addDotori(Dotori dotori) {
+        dotoriList.add(dotori);
+        dotori.setDotoriCollection(this);
+    }
+
 }

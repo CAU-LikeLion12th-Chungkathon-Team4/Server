@@ -32,7 +32,8 @@ public class SecurityConfig {
             "/join",
             "/login",
             "/api/v1/check",
-            "/join/check"
+            "/join/check",
+            "/dotori/upload"
     };
 
     private static final String[] AUTH_USER_LIST = {
