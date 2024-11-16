@@ -2,6 +2,7 @@ package com.chungkathon.squirrel.service;
 
 import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
+import com.chungkathon.squirrel.util.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,7 +22,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         Member member = memberJpaRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
 
-        return new User(member.getUsername(), member.getPassword(), new ArrayList<>());
+        // CustomUserDetails를 반환
+        return new CustomUserDetails(member.getId(), member.getUsername(), member.getPassword());
     }
 }
 
