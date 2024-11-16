@@ -24,6 +24,7 @@ public class DotoriCollection extends BaseTimeEntity {
     private String message;
 
     @NotNull
+    @Column(name = "is_locked")
     private boolean lock;
 
     @NotNull
@@ -37,7 +38,7 @@ public class DotoriCollection extends BaseTimeEntity {
     private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "quiz_id")
+    @JoinColumn(name = "dotori_collection_id")
     private Quiz quiz;
 
     @Builder
@@ -54,7 +55,7 @@ public class DotoriCollection extends BaseTimeEntity {
         return this.dotori_collection_id;
     }
 
-    public Object getMessage() {
+    public String getMessage() {
         return this.message;
     }
 
