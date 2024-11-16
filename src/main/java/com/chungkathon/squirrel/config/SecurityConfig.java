@@ -53,6 +53,7 @@ public class SecurityConfig {
                     auth.requestMatchers(AUTH_USER_LIST).authenticated(); // 인증된 사용자만 접근 가능
                     auth.requestMatchers("/dynamic/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll(); // 동적 경로는 마지막에 허용
                     auth.requestMatchers("/dotoricollection/create/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll();
+                    auth.requestMatchers("/dotori/get/{collectionId:[a-zA-Z0-9\\\\-]+}").permitAll();
                     auth.anyRequest().authenticated();
                 })
 //                .formLogin(Customizer.withDefaults())

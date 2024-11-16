@@ -43,4 +43,30 @@ public class DotoriController {
 
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/get/{collectionId}")
+    public ResponseEntity<Map<String, Object>> getDotorisByCollectionId(
+            @PathVariable("collectionId") Long collectionID
+    ) {
+        // 도토리 가방 찾기
+        DotoriCollection dotoriCollection = dotoriCollectionRepository.findById(collectionID)
+                .orElseThrow(() -> new IllegalArgumentException("collectionID가 존재하지 않음"));
+
+        // 도토리 리스트를 받아오기
+        List<Dotori> dotoris = dotoriCollection.getDotoriList();
+
+        // 도토리 데이터 반환
+        List<Map<String, Object>> dotoriData = dotoris.stream().map(dotori -> {
+            Map<String, Object> dotoriInfo = new HashMap<>();
+            dotoriInfo.put("id", dotori.getId());
+            dotoriInfo.put("photoUrl", dotori.getPhotoUrl());
+            return dotoriInfo;
+        }).toList();
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("dotoris", dotoriData);
+
+        return ResponseEntity.ok(response);
+    }
 }

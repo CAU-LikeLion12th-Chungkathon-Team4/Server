@@ -26,7 +26,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String[] EXCLUDED_PATHS = {"/join", "/login", "/api/v1/check", "/join/check", "/dotori/upload"};
     private static final String[] DYNAMIC_PATH_PATTERN = {"^/dynamic/[a-zA-Z0-9\\-]+$",
             "^/dotoricollection/create/[a-zA-Z0-9\\-]+$",
-            "^/dotori/upload/[a-zA-Z0-9\\-]+$"};
+            "^/dotori/upload/[a-zA-Z0-9\\-]+$",
+            "^/dotori/get/[a-zA-Z0-9\\-]+$"};
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
