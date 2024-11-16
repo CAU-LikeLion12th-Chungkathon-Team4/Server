@@ -97,4 +97,11 @@ public class DotoriCollection extends BaseTimeEntity {
         dotoriList.add(dotori);
         dotori.setDotoriCollection(this);
     }
+
+    // 도토리를 삭제 (양방향 관계를 고려)
+    public void removeDotori(Dotori dotori) {
+        dotoriList.remove(dotori); // 리스트에서 제거
+        dotori.setDotoriCollection(null); // 연관 관계 해제
+        this.dotori_num--; // dotori_num 감소
+    }
 }
