@@ -86,6 +86,7 @@ public class DotoriController {
         DotoriCollection dotoriCollection = dotori.getDotoriCollection();
         if (dotoriService.isOwner(dotoriCollection)) {
             // 삭제
+            dotoriCollection.removeDotori(dotori);
             dotoriRepository.delete(dotori);
 
             // 성공 메시지
