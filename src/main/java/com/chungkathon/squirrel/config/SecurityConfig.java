@@ -32,6 +32,7 @@ public class SecurityConfig {
             "/join",
             "/login",
             "/api/v1/check",
+            "/join/check"
     };
 
     private static final String[] AUTH_USER_LIST = {

@@ -3,6 +3,7 @@ package com.chungkathon.squirrel.service;
 import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.dto.request.JoinRequest;
 import com.chungkathon.squirrel.dto.request.LoginRequest;
+import com.chungkathon.squirrel.dto.request.RedundancyCheckRequest;
 import com.chungkathon.squirrel.dto.response.MemberResponse;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import com.chungkathon.squirrel.util.URLGenerator;
@@ -60,6 +61,16 @@ public class MemberService {
                 .urlRnd(url_rnd)
                 .build();
         return memberJpaRepository.save(member);
+    }
+
+    public Boolean joinCheck(RedundancyCheckRequest redundancyCheckRequest) {
+
+        // 이미 존재하는 사용자 처리 (예외 처리 추가 가능)
+        if (memberJpaRepository.existsByUsername(redundancyCheckRequest.getUsername())) {
+            return true;
+        }
+
+        return false;
     }
 
     public Member login(LoginRequest loginRequest) {
