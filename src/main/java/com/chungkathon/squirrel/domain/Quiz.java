@@ -15,7 +15,7 @@ public class Quiz {
     @GeneratedValue(strategy = IDENTITY)
     private Long quiz_id;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "quiz")
+    @OneToOne(mappedBy = "quiz", fetch = FetchType.LAZY)
     private DotoriCollection dotoriCollection;
 
     @NotNull
