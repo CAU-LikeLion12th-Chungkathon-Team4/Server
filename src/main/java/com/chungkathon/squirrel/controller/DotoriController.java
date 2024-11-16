@@ -8,7 +8,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/dotori")
@@ -23,7 +25,7 @@ public class DotoriController {
     }
 
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadMultipleDotori(
+    public ResponseEntity<Map<String, Object>> uploadMultipleDotori(
             @RequestParam("files") List<MultipartFile> files,
             @RequestParam("collectionId") Long collectionId
     ) {
@@ -34,7 +36,11 @@ public class DotoriController {
         // 2. Dotori 생성 및 업로드
         List<String> uploadedPhotoUrls = dotoriService.createMultipleDotori(files, collection);
 
-        // 3. 성공 메시지 반환
-        return ResponseEntity.ok("Uploaded Photos: " + String.join(", ", uploadedPhotoUrls));
+        // 3. JSON 응답 생성
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", "success");
+        response.put("uploadedPhotoUrls", uploadedPhotoUrls);
+
+        return ResponseEntity.ok(response);
     }
 }
