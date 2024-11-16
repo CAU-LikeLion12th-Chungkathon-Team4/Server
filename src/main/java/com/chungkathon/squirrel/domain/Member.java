@@ -3,6 +3,9 @@ package com.chungkathon.squirrel.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
@@ -32,5 +35,22 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private SquirrelType squirrelType;      // 사용자 다람쥐 타입
+
     private String urlRnd;         // 사용자 다람쥐 url
+
+    // dotori collection과 1:N 관계
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DotoriCollection> dotoriCollections = new ArrayList<>();
+
+    // DotoriCollection 추가 메서드
+    public void addDotoriCollection(DotoriCollection dotoriCollection) {
+        dotoriCollections.add(dotoriCollection);
+        dotoriCollection.setMember(this);
+    }
+
+    // DotoriCollection 제거 메서드
+    public void removeDotoriCollection(DotoriCollection dotoriCollection) {
+        dotoriCollections.remove(dotoriCollection);
+        dotoriCollection.setMember(null);
+    }
 }

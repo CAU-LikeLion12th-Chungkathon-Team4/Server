@@ -27,9 +27,9 @@ public class DotoriCollectionController {
     }
 
     // 도토리 주머니 생성
-    @PostMapping("/create")
-    public DotoriCollection createDotoriCollection(@RequestBody DotoriCollectionCreateRequestDto requestDto) {
-        return dotoriCollectionService.createDotoriCollection(requestDto);
+    @PostMapping("/create/{urlRnd}")
+    public DotoriCollection createDotoriCollection(@PathVariable String urlRnd, @RequestBody DotoriCollectionCreateRequestDto requestDto) {
+        return dotoriCollectionService.createDotoriCollection(urlRnd, requestDto);
     }
 
     // 잠금 해제 전 퀴즈 제공

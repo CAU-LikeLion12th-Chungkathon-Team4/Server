@@ -17,8 +17,6 @@ public class DotoriCollection extends BaseTimeEntity {
     @GeneratedValue(strategy = IDENTITY)
     private Long dotori_collection_id;
 
-    // @OneToMany
-    // User
 
     @NotNull
     private String sender;
@@ -33,6 +31,10 @@ public class DotoriCollection extends BaseTimeEntity {
 
     @NotNull
     private int dotori_num;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member;
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "quiz_id")
@@ -71,5 +73,9 @@ public class DotoriCollection extends BaseTimeEntity {
 
     public void setDeleted(boolean b) {
         this.deleted = b;
+    }
+
+    public void setMember(Member member) {
+        this.member = member;
     }
 }

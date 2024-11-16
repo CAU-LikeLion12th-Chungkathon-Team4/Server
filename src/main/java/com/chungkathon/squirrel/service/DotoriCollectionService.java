@@ -1,6 +1,7 @@
 package com.chungkathon.squirrel.service;
 
 import com.chungkathon.squirrel.domain.DotoriCollection;
+import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.domain.Quiz;
 import com.chungkathon.squirrel.domain.QuizReply;
 import com.chungkathon.squirrel.dto.request.DotoriCollectionCreateRequestDto;
@@ -8,6 +9,7 @@ import com.chungkathon.squirrel.dto.request.QuizCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
 import com.chungkathon.squirrel.dto.response.DotoriCollectionResponseDto;
 import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
+import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import com.chungkathon.squirrel.repository.QuizJpaRepository;
 import com.chungkathon.squirrel.repository.QuizReplyJpaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +26,8 @@ public class DotoriCollectionService {
     private QuizJpaRepository quizJpaRepository;
     @Autowired
     private QuizReplyJpaRepository quizReplyJpaRepository;
+    @Autowired
+    private MemberJpaRepository memberRepository;
 
     public DotoriCollectionService(DotoriCollectionJpaRepository dotoriCollectionJpaRepository) {
         this.dotoriCollectionJpaRepository = dotoriCollectionJpaRepository;
@@ -31,11 +35,13 @@ public class DotoriCollectionService {
     }
 
     @Transactional
-    public DotoriCollection createDotoriCollection(DotoriCollectionCreateRequestDto requestDto) {
+    public DotoriCollection createDotoriCollection(String urlRnd, DotoriCollectionCreateRequestDto requestDto) {
         QuizCreateRequestDto quizRequest = new QuizCreateRequestDto();
         quizRequest.setQuestion(requestDto.getQuestion());
         quizRequest.setAnswer(requestDto.getAnswer());
         Quiz quiz = quizService.createQuiz(quizRequest);
+        Member member = memberRepository.findByUrlRnd(urlRnd)
+                .orElseThrow(() -> new IllegalArgumentException("Member with urlRnd " + urlRnd + " not found"));
 
         DotoriCollection dotoriCollection = DotoriCollection.builder()
                 .sender(requestDto.getSender())
@@ -46,6 +52,7 @@ public class DotoriCollectionService {
                 .quiz(quiz)
                 .build();
 
+        member.addDotoriCollection(dotoriCollection);
         quiz.setDotoriCollection(dotoriCollection);
         dotoriCollectionJpaRepository.save(dotoriCollection);
         quizJpaRepository.save(quiz);
