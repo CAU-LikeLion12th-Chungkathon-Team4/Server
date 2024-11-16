@@ -4,6 +4,7 @@ import com.chungkathon.squirrel.domain.DotoriCollection;
 import com.chungkathon.squirrel.domain.Quiz;
 import com.chungkathon.squirrel.dto.request.DotoriCollectionCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
+import com.chungkathon.squirrel.dto.response.DotoriCollectionCreateDto;
 import com.chungkathon.squirrel.dto.response.DotoriCollectionResponseDto;
 import com.chungkathon.squirrel.dto.response.QuizResponseDto;
 import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
@@ -28,7 +29,7 @@ public class DotoriCollectionController {
 
     // 도토리 주머니 생성
     @PostMapping("/create/{urlRnd}")
-    public DotoriCollection createDotoriCollection(@PathVariable String urlRnd, @RequestBody DotoriCollectionCreateRequestDto requestDto) {
+    public DotoriCollectionCreateDto createDotoriCollection(@PathVariable String urlRnd, @RequestBody DotoriCollectionCreateRequestDto requestDto) {
         return dotoriCollectionService.createDotoriCollection(urlRnd, requestDto);
     }
 
