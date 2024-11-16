@@ -87,7 +87,7 @@ public class DotoriCollection extends BaseTimeEntity {
         this.member = member;
     }
 
-    // public int getDotoriNum() { return this.dotori_num; }
+    public int getDotoriNum() { return this.dotori_num; }
   
     // 도토리 추가 (양방향 관계를 고려)
     public void addDotori(Dotori dotori) {
