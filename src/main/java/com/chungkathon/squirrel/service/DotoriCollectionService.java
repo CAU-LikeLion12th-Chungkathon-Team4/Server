@@ -19,6 +19,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @Getter
 public class DotoriCollectionService {
@@ -82,16 +84,6 @@ public class DotoriCollectionService {
         return dotoriCollectionCreateDto;
     }
 
-//    @Transactional
-//    public Quiz getQuiz(Long dotori_collection_id) {
-//        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
-//                .orElseThrow(() -> new IllegalArgumentException("해당 ID를 가진 도토리 주머니가 없습니다."));
-//
-////        Quiz quiz = quizJpaRepository.findById(dotoriCollection.getQuizId())
-////                .orElseThrow(() -> new RuntimeException("해당 ID에 연결된 퀴즈가 없습니다."));
-//        return dotoriCollection.getQuiz();
-//    }
-
     @Transactional
     public boolean updateDotoriCollection(Long dotori_collection_id, QuizReplyCreateRequestDto requestDto) {
         DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
@@ -132,5 +124,10 @@ public class DotoriCollectionService {
                 .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
 //        DotoriCollection dotoriCollection = getDotoriCollection(dotori_collection_id);
         dotoriCollectionJpaRepository.delete(dotoriCollection);
+    }
+
+    @Transactional
+    public List<DotoriCollection> getActiveDotoriCollections(String urlRnd) {
+        return dotoriCollectionJpaRepository.findActiveDotoriCollectionsByMember(urlRnd);
     }
 }

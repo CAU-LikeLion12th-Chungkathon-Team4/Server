@@ -79,4 +79,6 @@ public class DotoriCollection extends BaseTimeEntity {
     public void setMember(Member member) {
         this.member = member;
     }
+
+    public int getDotoriNum() { return this.dotori_num; }
 }
