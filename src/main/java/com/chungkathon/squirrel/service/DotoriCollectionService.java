@@ -135,6 +135,28 @@ public class DotoriCollectionService {
     public List<DotoriCollection> getActiveDotoriCollections(String urlRnd) {
         return dotoriCollectionJpaRepository.findActiveDotoriCollectionsByMember(urlRnd);
     }
+  
+    @Transactional
+    public Boolean getIsOwner(String urlRnd) {      // 해당 urlRnd를 가진 사용자가 로그인한 사용자와 같은지
+        // SecurityContext에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+
+        // Principal에서 사용자 이름 가져오기
+        String username = authentication.getName();
+
+        // 사용자 이름으로 Member 엔티티 조회
+        try {
+            Member member = memberRepository.findByUsername(username)
+                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            return member.getUrlRnd().equals(urlRnd);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
 
     @Transactional
     public boolean isDotoriCollectionOwner(Long dotori_collection_id) {
