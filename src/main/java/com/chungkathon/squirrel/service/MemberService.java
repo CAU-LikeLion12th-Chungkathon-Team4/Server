@@ -117,4 +117,15 @@ public class MemberService {
                 member.getUrlRnd()
         );
     }
+
+    public MemberResponse getMemberInfo(Member member) {
+        // DTO 형식 반환
+        return new MemberResponse(
+                member.getId(),
+                member.getUsername(),
+                member.getNickname(),
+                member.getSquirrelType(),
+                member.getUrlRnd()
+        );
+    }
 }
