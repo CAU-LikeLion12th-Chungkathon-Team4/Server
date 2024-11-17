@@ -61,6 +61,8 @@ public class DotoriCollectionController {
     public DotoriCollectionCreateDto createDotoriCollection(@PathVariable String urlRnd,
                                                             @RequestParam("requestJson") String requestDtoString,
                                                             @RequestParam("files")List<MultipartFile> files) {
+        int fileCount = files.size();
+
         // 요청 문자열을 JSON으로
         ObjectMapper objectMapper = new ObjectMapper();
         DotoriCollectionCreateRequestDto requestDto;
@@ -76,6 +78,7 @@ public class DotoriCollectionController {
                 .orElseThrow(() -> new IllegalArgumentException("해당 ID에 해당하는 도토리 가방이 존재하지 않습니다."));
         dotoriService.createMultipleDotori(files, dotoriCollection);
 
+        responseDto.setDotoriNum(fileCount);
         return responseDto;
     }
 

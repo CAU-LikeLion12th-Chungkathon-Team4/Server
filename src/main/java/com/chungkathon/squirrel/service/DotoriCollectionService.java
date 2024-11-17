@@ -54,7 +54,7 @@ public class DotoriCollectionService {
                 .message(requestDto.getMessage())
                 .lock(true)
                 .deleted(false)
-                .dotori_num(Math.min(7, Math.max(1, requestDto.getDotori_num())))
+                .dotori_num(0)
                 .quiz(quiz)
                 .build();
 
