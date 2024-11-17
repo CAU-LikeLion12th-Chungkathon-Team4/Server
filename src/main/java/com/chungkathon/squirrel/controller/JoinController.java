@@ -35,7 +35,7 @@ public class JoinController {
         String refreshToken = jwtTokenProvider.generateRefreshToken(member.getUsername());
 
         // 토큰 반환
-        return TokenResponse.of(accessToken, refreshToken, member.getId());
+        return TokenResponse.of(accessToken, refreshToken, member.getId(), member.getUrlRnd());
     }
 
     @PostMapping("/join/check")
@@ -49,6 +49,9 @@ public class JoinController {
     @PostMapping("/login")
     public TokenResponse login(@RequestBody LoginRequest loginRequest) {
         Member member = memberService.login(loginRequest);
-        return TokenResponse.of(jwtTokenProvider.generateAccessToken(member.getUsername()), jwtTokenProvider.generateRefreshToken(member.getUsername()), member.getId());
+        return TokenResponse.of(jwtTokenProvider.generateAccessToken(member.getUsername()),
+                jwtTokenProvider.generateRefreshToken(member.getUsername()),
+                member.getId(),
+                member.getUrlRnd());
     }
 }
