@@ -1,18 +1,23 @@
 package com.chungkathon.squirrel.controller;
 
 import com.chungkathon.squirrel.domain.DotoriCollection;
+import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.domain.Quiz;
 import com.chungkathon.squirrel.dto.request.DotoriCollectionCreateRequestDto;
 import com.chungkathon.squirrel.dto.request.QuizReplyCreateRequestDto;
+import com.chungkathon.squirrel.dto.request.RedundancyCheckRequest;
 import com.chungkathon.squirrel.dto.response.DotoriCollectionCreateDto;
 import com.chungkathon.squirrel.dto.response.DotoriCollectionResponseDto;
 import com.chungkathon.squirrel.dto.response.QuizResponseDto;
 import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
+import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import com.chungkathon.squirrel.service.DotoriCollectionService;
 import com.chungkathon.squirrel.service.DotoriService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,11 +35,16 @@ public class DotoriCollectionController {
     private final DotoriCollectionJpaRepository dotoriCollectionJpaRepository;
     private DotoriCollectionService dotoriCollectionService;
     private DotoriService dotoriService;
+    private MemberJpaRepository memberJpaRepository;
 
-    public DotoriCollectionController(DotoriCollectionService dotoriCollectionService, DotoriCollectionJpaRepository dotoriCollectionJpaRepository, DotoriService dotoriService) {
+    public DotoriCollectionController(DotoriCollectionService dotoriCollectionService,
+                                      DotoriCollectionJpaRepository dotoriCollectionJpaRepository,
+                                      DotoriService dotoriService,
+                                      MemberJpaRepository memberJpaRepository) {
         this.dotoriCollectionService = dotoriCollectionService;
         this.dotoriCollectionJpaRepository = dotoriCollectionJpaRepository;
         this.dotoriService = dotoriService;
+        this.memberJpaRepository = memberJpaRepository;
     }
 
     // 사용자별 도토리 주머니 모아보기 (삭제된 도토리 주머니 제외)
