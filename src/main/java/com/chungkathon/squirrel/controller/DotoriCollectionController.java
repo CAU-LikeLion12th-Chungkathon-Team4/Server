@@ -12,6 +12,7 @@ import com.chungkathon.squirrel.service.DotoriCollectionService;
 import com.chungkathon.squirrel.service.DotoriService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -101,13 +103,35 @@ public class DotoriCollectionController {
 
     // 잠금 해제 전 퀴즈 응답
     @PutMapping("/{dotori_collection_id}/reply")
-    public ResponseEntity checkDotoriCollection(@PathVariable Long dotori_collection_id, @RequestBody QuizReplyCreateRequestDto requestDto) {
-        boolean isCorrect = dotoriCollectionService.updateDotoriCollection(dotori_collection_id, requestDto);
-        if (isCorrect) {
-            return ResponseEntity.ok("정답입니다. 도토리 주머니의 잠금이 해제되었습니다.");
+    public ResponseEntity<Map<String, String>> checkDotoriCollection(@PathVariable Long dotori_collection_id, @RequestBody QuizReplyCreateRequestDto requestDto) {
+        boolean isOwner = dotoriCollectionService.isDotoriCollectionOwner(dotori_collection_id);
+        boolean isCorrect = dotoriCollectionService.updateDotoriCollection(isOwner, dotori_collection_id, requestDto);
+
+        // 도토리 가방의 주인일 경우
+        if (isOwner) {
+            if (isCorrect) {
+                Map<String, String> response = new HashMap<>();
+                response.put("status", "success");
+                response.put("message", "정답입니다. 도토리 주머니의 잠금이 해제되었습니다.");
+
+                return ResponseEntity.ok(response);
+            }
+            else {
+                Map<String, String> response = new HashMap<>();
+                response.put("status", "success");
+                response.put("message", "틀렸습니다. 도토리 주머니가 삭제되었습니다.");
+
+                return ResponseEntity.ok(response);
+            }
         }
+
+        // 도토리 가방의 주인이 아닐 경우
         else {
-            return ResponseEntity.status(200).body("틀렸습니다. 도토리 주머니가 삭제되었습니다."); // return ResponseEntity.noContent().build();
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "fail");
+            response.put("message", "사용자가 도토리의 주인이 아닙니다.");
+
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
     }
 
