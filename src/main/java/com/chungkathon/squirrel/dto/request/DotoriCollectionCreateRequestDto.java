@@ -12,7 +12,6 @@ public class DotoriCollectionCreateRequestDto {
     private String sender;
     private String message;
     private boolean lock;
-    private int dotori_num;
     private Quiz quiz;
 
     public String getSender() {

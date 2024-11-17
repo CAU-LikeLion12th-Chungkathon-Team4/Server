@@ -9,9 +9,13 @@ import com.chungkathon.squirrel.dto.response.DotoriCollectionResponseDto;
 import com.chungkathon.squirrel.dto.response.QuizResponseDto;
 import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
 import com.chungkathon.squirrel.service.DotoriCollectionService;
+import com.chungkathon.squirrel.service.DotoriService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,10 +28,12 @@ import java.util.stream.Collectors;
 public class DotoriCollectionController {
     private final DotoriCollectionJpaRepository dotoriCollectionJpaRepository;
     private DotoriCollectionService dotoriCollectionService;
+    private DotoriService dotoriService;
 
-    public DotoriCollectionController(DotoriCollectionService dotoriCollectionService, DotoriCollectionJpaRepository dotoriCollectionJpaRepository) {
+    public DotoriCollectionController(DotoriCollectionService dotoriCollectionService, DotoriCollectionJpaRepository dotoriCollectionJpaRepository, DotoriService dotoriService) {
         this.dotoriCollectionService = dotoriCollectionService;
         this.dotoriCollectionJpaRepository = dotoriCollectionJpaRepository;
+        this.dotoriService = dotoriService;
     }
 
     // 사용자별 도토리 주머니 모아보기 (삭제된 도토리 주머니 제외)
@@ -52,8 +58,28 @@ public class DotoriCollectionController {
 
     // 도토리 주머니 생성
     @PostMapping("/{urlRnd}/create")
-    public DotoriCollectionCreateDto createDotoriCollection(@PathVariable String urlRnd, @RequestBody DotoriCollectionCreateRequestDto requestDto) {
-        return dotoriCollectionService.createDotoriCollection(urlRnd, requestDto);
+    public DotoriCollectionCreateDto createDotoriCollection(@PathVariable String urlRnd,
+                                                            @RequestParam("requestJson") String requestDtoString,
+                                                            @RequestParam("files")List<MultipartFile> files) {
+        int fileCount = files.size();
+
+        // 요청 문자열을 JSON으로
+        ObjectMapper objectMapper = new ObjectMapper();
+        DotoriCollectionCreateRequestDto requestDto;
+        try {
+            requestDto = objectMapper.readValue(requestDtoString, DotoriCollectionCreateRequestDto.class);
+            System.out.println(requestDto);
+        } catch (JsonProcessingException e) {
+            throw  new RuntimeException("Invalid JSON String");
+        }
+
+        DotoriCollectionCreateDto responseDto = dotoriCollectionService.createDotoriCollection(urlRnd, requestDto);
+        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(responseDto.getId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID에 해당하는 도토리 가방이 존재하지 않습니다."));
+        dotoriService.createMultipleDotori(files, dotoriCollection);
+
+        responseDto.setDotoriNum(fileCount);
+        return responseDto;
     }
 
     @GetMapping("/{dotori_collection_id}/quiz")
