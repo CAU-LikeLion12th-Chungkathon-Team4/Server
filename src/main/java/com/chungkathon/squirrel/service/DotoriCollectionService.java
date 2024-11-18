@@ -179,4 +179,20 @@ public class DotoriCollectionService {
 
         return dotoriCollection.getMember().equals(member);
     }
+
+    @Transactional
+    public boolean isDotoriCollectionFull(String urlRnd) {
+        boolean result = false;
+
+        Member member = memberRepository.findByUrlRnd(urlRnd)
+                .orElseThrow(() -> new IllegalArgumentException("urlRnd 확인해주세요"));
+
+        int dotoriCollectionNum = member.getDotoriCollections().size();
+
+        if (dotoriCollectionNum >= 23) {
+            result = true;
+        }
+
+        return result;
+    }
 }
