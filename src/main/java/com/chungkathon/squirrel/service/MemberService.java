@@ -33,7 +33,7 @@ public class MemberService {
         String password = joinRequest.getPassword();
 
         // 아이디와 비밀번호 검증: 알파벳, 숫자, 특수문자만 허용 + 길이 제한
-        String pattern = "^[a-zA-Z0-9]{1,12}$";
+        String pattern = "^[a-zA-Z0-9!@#$%^&*()_+]{1,12}$";
 
         // ID 검증: 알파벳, 숫자, 특수문자 허용 + 최대 12자
         if (!username.matches(pattern)) {
