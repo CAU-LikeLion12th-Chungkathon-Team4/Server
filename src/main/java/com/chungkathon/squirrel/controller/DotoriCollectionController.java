@@ -106,7 +106,6 @@ public class DotoriCollectionController {
             return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
         }
 
-
         DotoriCollection dotoriCollection = dotoriCollectionService.getDotoriCollection(dotori_collection_id);
         Quiz quiz = dotoriCollection.getQuiz();
 
