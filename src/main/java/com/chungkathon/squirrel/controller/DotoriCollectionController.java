@@ -97,6 +97,16 @@ public class DotoriCollectionController {
 
     @GetMapping("/{dotori_collection_id}/quiz")
     public ResponseEntity<?> getQuizByDotoriCollectionId(@PathVariable Long dotori_collection_id) {
+        boolean isOwner = dotoriCollectionService.isDotoriCollectionOwner(dotori_collection_id);
+
+        if (!isOwner) {
+            Map<String, String> response = new HashMap<>();
+            response.put("status", "fail");
+            response.put("message", "사용자가 도토리 주머니의 소유자가 아닙니다.");
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+        }
+
+
         DotoriCollection dotoriCollection = dotoriCollectionService.getDotoriCollection(dotori_collection_id);
         Quiz quiz = dotoriCollection.getQuiz();
 
