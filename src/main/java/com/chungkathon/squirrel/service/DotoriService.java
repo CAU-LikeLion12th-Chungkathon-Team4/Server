@@ -26,20 +26,21 @@ public class DotoriService {
     private final MemberJpaRepository memberJpaRepository;
 
     public Dotori createDotori(MultipartFile file, DotoriCollection collection) {
-        // 1. S3에 파일 업로드
+        // S3에 파일 업로드
         String photoUrl = s3Service.uploadPhoto(file);
 
-        // 2. Dotori 엔터티 생성
+        // Dotori 엔터티 생성
         Dotori dotori = Dotori.builder()
                 .photoUrl(photoUrl)
                 .dotoriCollection(collection)
                 .build();
 
-        // 3. 저장
+        // 저장
         return dotoriRepository.save(dotori);
     }
 
     public List<String> createMultipleDotori(List<MultipartFile> files, DotoriCollection collection) {
+        int fileCount = files.size();
 
         return files.stream().map(file -> {
             // S3에 파일 업로드
@@ -51,7 +52,10 @@ public class DotoriService {
                     .dotoriCollection(collection)
                     .build();
 
+            collection.addDotori(dotori);
             dotoriRepository.save(dotori);
+
+            collection.setDotoriNum(fileCount);
 
             return photoUrl;
         }).collect(Collectors.toList());

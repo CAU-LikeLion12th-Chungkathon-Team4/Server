@@ -16,6 +16,8 @@ import com.chungkathon.squirrel.repository.QuizJpaRepository;
 import com.chungkathon.squirrel.repository.QuizReplyJpaRepository;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,7 +56,7 @@ public class DotoriCollectionService {
                 .message(requestDto.getMessage())
                 .lock(true)
                 .deleted(false)
-                .dotori_num(Math.min(7, Math.max(1, requestDto.getDotori_num())))
+                .dotori_num(0)
                 .quiz(quiz)
                 .build();
 
@@ -85,29 +87,32 @@ public class DotoriCollectionService {
     }
 
     @Transactional
-    public boolean updateDotoriCollection(Long dotori_collection_id, QuizReplyCreateRequestDto requestDto) {
-        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
-                .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
+    public boolean updateDotoriCollection(Boolean isOwner, Long dotori_collection_id, QuizReplyCreateRequestDto requestDto) {
+        if (isOwner) {
+            DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
+                    .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
 
-        Quiz quiz = dotoriCollection.getQuiz();
-        if (quiz == null) {
-            throw new RuntimeException("도토리 주머니에 연결된 퀴즈가 없습니다.");
-        }
+            Quiz quiz = dotoriCollection.getQuiz();
+            if (quiz == null) {
+                throw new RuntimeException("도토리 주머니에 연결된 퀴즈가 없습니다.");
+            }
 
-        QuizReply quizReply = new QuizReply(quiz, requestDto.getReply());
+            QuizReply quizReply = new QuizReply(quiz, requestDto.getReply());
 //        quizReply.setQuiz(quiz);
 //        quizReply.setReply(requestDto.getReply());
-        quizReplyJpaRepository.save(quizReply);
+            quizReplyJpaRepository.save(quizReply);
 
-        boolean isCorrect = quizService.checkQuizReply(dotoriCollection.getId() , requestDto);
+            boolean isCorrect = quizService.checkQuizReply(dotoriCollection.getId() , requestDto);
 
-        if (isCorrect) { // 퀴즈 정답과 응답이 일치하면
-            dotoriCollection.setLock(false); // 도토리 주머니 잠금 해제
+            if (isCorrect) { // 퀴즈 정답과 응답이 일치하면
+                dotoriCollection.setLock(false); // 도토리 주머니 잠금 해제
+            }
+            else { // 퀴즈 정답과 응답이 불일치하면
+                dotoriCollection.setDeleted(true); // 도토리 주머니 삭제
+            }
+            return isCorrect;
         }
-        else { // 퀴즈 정답과 응답이 불일치하면
-            dotoriCollection.setDeleted(true); // 도토리 주머니 삭제
-        }
-        return isCorrect;
+        return false;
     }
 
     @Transactional
@@ -129,5 +134,65 @@ public class DotoriCollectionService {
     @Transactional
     public List<DotoriCollection> getActiveDotoriCollections(String urlRnd) {
         return dotoriCollectionJpaRepository.findActiveDotoriCollectionsByMember(urlRnd);
+    }
+  
+    @Transactional
+    public Boolean getIsOwner(String urlRnd) {      // 해당 urlRnd를 가진 사용자가 로그인한 사용자와 같은지
+        // SecurityContext에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            return false;
+        }
+
+        // Principal에서 사용자 이름 가져오기
+        String username = authentication.getName();
+
+        // 사용자 이름으로 Member 엔티티 조회
+        try {
+            Member member = memberRepository.findByUsername(username)
+                    .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
+            return member.getUrlRnd().equals(urlRnd);
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    @Transactional
+    public boolean isDotoriCollectionOwner(Long dotori_collection_id) {
+        // SecurityContext에서 인증 정보 가져오기
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new IllegalArgumentException("로그인된 사용자가 없습니다.");
+        }
+
+        // Principal에서 사용자 이름 가져오기
+        String username = authentication.getName();
+
+        // 사용자 이름으로 Member 엔티티 조회
+        Member member = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다. 로그인이 되어 있는지 확인해주세요"));
+
+        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 id의 도토리 가방이 존재하지 않습니다."));
+
+        return dotoriCollection.getMember().equals(member);
+    }
+
+    @Transactional
+    public boolean isDotoriCollectionFull(String urlRnd) {
+        boolean result = false;
+
+        Member member = memberRepository.findByUrlRnd(urlRnd)
+                .orElseThrow(() -> new IllegalArgumentException("urlRnd 확인해주세요"));
+
+        int dotoriCollectionNum = member.getDotoriCollections().size();
+
+        if (dotoriCollectionNum >= 23) {
+            result = true;
+        }
+
+        return result;
     }
 }

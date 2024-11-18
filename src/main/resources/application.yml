@@ -37,28 +37,6 @@ spring:
       max-file-size: 10MB  # 업로드할 수 있는 단일 파일의 최대 크기
       max-request-size: 20MB  # 요청 전체의 최대 크기
 
-  #  # RDS
-  #  profiles:
-  #    include: SECRET-KEY
-  #
-  #  datasource:
-  #    driver-class-name: com.mysql.cj.jdbc.Driver
-  #    url: jdbc:mysql://${database-host}:3306/${database-name}
-  #    username: ${database-username}
-  #    password: ${database-password}
-  #
-  #  jpa:
-  #    show-sql: true
-  #    hibernate:
-  #      ddl-auto: create
-  #    properties:
-  #      hibernate:
-  #        format_sql: true
-  #        dialect: org.hibernate.dialect.MySQLDialect
-  #
-  #  logging.level:
-  #    org.hibernate.SQL: debug
-
   logging.level:
     org.hibernate.SQL: debug
 
