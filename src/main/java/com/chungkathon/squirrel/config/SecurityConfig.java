@@ -55,7 +55,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/dotoricollection/{urlRnd:[a-zA-Z0-9\\\\-]+}").permitAll();
                     auth.requestMatchers("/dotoricollection/{urlRnd:[a-zA-Z0-9\\\\-]+}/create").permitAll();
                     auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/open").permitAll();
-                    auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/quiz").permitAll();
+                    auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/quiz").authenticated();
                     auth.requestMatchers("/dotoricollection/{dotori_collection_id:[a-zA-Z0-9\\\\-]+}/reply").authenticated();
                     auth.requestMatchers("/dotori/get/{collectionId:[a-zA-Z0-9\\\\-]+}").permitAll();
                     auth.requestMatchers("/{urlRnd:[a-zA-Z0-9\\\\-]+}/member").permitAll();
