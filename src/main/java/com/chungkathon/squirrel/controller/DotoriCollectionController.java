@@ -115,7 +115,8 @@ public class DotoriCollectionController {
         QuizResponseDto responseDto = new QuizResponseDto(
                 quiz.getId(),
                 quiz.getQuestion(),
-                quiz.getAnswer()
+                quiz.getAnswer(),
+                dotoriCollection.getSender()
         );
 
         return ResponseEntity.ok().body(responseDto);
