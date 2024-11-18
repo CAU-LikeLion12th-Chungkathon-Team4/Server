@@ -22,6 +22,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.multipart.MultipartFile;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -172,5 +173,15 @@ public class DotoriCollectionController {
         );
 
         return ResponseEntity.ok().body(responseDto);
+    }
+
+    @GetMapping("/{urlRnd}/isFull")
+    public ResponseEntity<Map<String, Boolean>> getIsFull(@PathVariable String urlRnd) {
+        boolean isFull = dotoriCollectionService.isDotoriCollectionFull(urlRnd);
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("isFull", isFull);
+
+        return ResponseEntity.ok(response);
     }
 }
