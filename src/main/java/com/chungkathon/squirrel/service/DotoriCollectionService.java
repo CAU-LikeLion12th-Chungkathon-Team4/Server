@@ -123,13 +123,13 @@ public class DotoriCollectionService {
         return dotoriCollection;
     }
 
-    @Transactional
-    public void deleteDotoriCollection(Long dotori_collection_id) {
-        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
-                .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
-//        DotoriCollection dotoriCollection = getDotoriCollection(dotori_collection_id);
-        dotoriCollectionJpaRepository.delete(dotoriCollection);
-    }
+//    @Transactional
+//    public void deleteDotoriCollection(Long dotori_collection_id) {
+//        DotoriCollection dotoriCollection = dotoriCollectionJpaRepository.findById(dotori_collection_id)
+//                .orElseThrow(() -> new RuntimeException("해당 ID를 가진 도토리 주머니가 없습니다."));
+////        DotoriCollection dotoriCollection = getDotoriCollection(dotori_collection_id);
+//        dotoriCollectionJpaRepository.delete(dotoriCollection);
+//    }
 
     @Transactional
     public List<DotoriCollection> getActiveDotoriCollections(String urlRnd) {

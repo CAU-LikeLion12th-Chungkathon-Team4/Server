@@ -3,6 +3,7 @@ package com.chungkathon.squirrel.service;
 import com.chungkathon.squirrel.domain.Dotori;
 import com.chungkathon.squirrel.domain.DotoriCollection;
 import com.chungkathon.squirrel.domain.Member;
+import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
 import com.chungkathon.squirrel.repository.DotoriJpaRepository;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ public class DotoriService {
     private final S3Service s3Service;
     private final DotoriJpaRepository dotoriRepository;
     private final MemberJpaRepository memberJpaRepository;
+    private final DotoriCollectionJpaRepository dotoriCollectionJpaRepository;
 
     public Dotori createDotori(MultipartFile file, DotoriCollection collection) {
         // S3에 파일 업로드
@@ -78,5 +80,32 @@ public class DotoriService {
 
         // 체크
         return member.getId().equals(owner.getId());
+    }
+
+//    public List<Dotori> getAllActiveDotori(DotoriCollection dotoriCollection) {
+//        return dotoriRepository.findAllActiveDotori(dotoriCollection);
+//    }
+
+    public void deleteDotori(Long dotori_id) {
+        Dotori dotori = dotoriRepository.findById(dotori_id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 ID를 가진 도토리가 존재하지 않습니다."));
+
+        DotoriCollection dotoriCollection = dotori.getDotoriCollection();
+
+        // 도토리 삭제
+        dotori.setDeleted(true);
+        dotoriRepository.save(dotori);
+
+        // 도토리 수 업데이트
+        int activeDotoriCount = (int) dotoriCollection.getDotoriList().stream()
+                .filter(d -> !d.isDeleted())
+                .count();
+        dotoriCollection.setDotoriNum(activeDotoriCount);
+
+        // 도토리 주머니 삭제
+        if (activeDotoriCount == 0) {
+            dotoriCollection.setDeleted(true);
+        }
+        dotoriCollectionJpaRepository.save(dotoriCollection);
     }
 }
