@@ -26,6 +26,9 @@ public class Dotori extends BaseTimeEntity {
     @JoinColumn(name = "dotori_collection_id", nullable = false)
     private DotoriCollection dotoriCollection;
 
+    @NotNull
+    private boolean deleted;
+
     @Builder
     public Dotori(String photoUrl, DotoriCollection dotoriCollection) {
         this.photoUrl = photoUrl;
@@ -34,5 +37,9 @@ public class Dotori extends BaseTimeEntity {
 
     public void setDotoriCollection(DotoriCollection dotoriCollection) {
         this.dotoriCollection = dotoriCollection;
+    }
+
+    public void setDeleted(boolean b) {
+        this.deleted = b;
     }
 }
