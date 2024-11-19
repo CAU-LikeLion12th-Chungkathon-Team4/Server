@@ -12,7 +12,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,6 +23,7 @@ public class DotoriService {
     private final DotoriJpaRepository dotoriRepository;
     private final DotoriCollectionJpaRepository dotoriCollectionRepository;
     private final MemberJpaRepository memberJpaRepository;
+    private final DotoriJpaRepository dotoriJpaRepository;
 
     public Dotori createDotori(MultipartFile file, DotoriCollection collection) {
         // S3에 파일 업로드
