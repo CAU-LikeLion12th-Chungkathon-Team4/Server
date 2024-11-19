@@ -85,14 +85,27 @@ public class DotoriController {
 
         DotoriCollection dotoriCollection = dotori.getDotoriCollection();
         if (dotoriService.isOwner(dotoriCollection)) {
-            // 삭제
+             // 삭제
             dotoriCollection.removeDotori(dotori);
             dotoriRepository.delete(dotori);
+
+            // 도토리가 남지 않으면 도토리 주머니는 삭제됨
+            if (dotoriCollection.getDotoriList().isEmpty()) {
+                // Delete the DotoriCollection
+                dotoriCollectionRepository.delete(dotoriCollection);
+            }
+
+//            if (dotoriCollection.getDotoriNum() == 0) {
+//                dotoriCollection.setDeleted(true);
+//                dotoriCollectionRepository.save(dotoriCollection);
+//
+//                return ResponseEntity.noContent().build();
+//            }
 
             // 성공 메시지
             Map<String, String> response = new HashMap<>();
             response.put("status", "success");
-            response.put("message", "도토리 삭제가 성공하였습니다.");
+            response.put("message", "도토리 삭제에 성공하였습니다.");
 
             return ResponseEntity.ok(response);
         }
@@ -100,7 +113,7 @@ public class DotoriController {
         // 실패 메시지
         Map<String, String> response = new HashMap<>();
         response.put("status","fail");
-        response.put("message", "도토리 삭제가 실패하였습니다. 로그인한 사용자를 확인해주세요.");
+        response.put("message", "도토리 삭제에 실패하였습니다. 로그인한 사용자를 확인해주세요.");
 
         return ResponseEntity.ok(response);
     }

@@ -3,8 +3,6 @@ package com.chungkathon.squirrel.service;
 import com.chungkathon.squirrel.domain.Dotori;
 import com.chungkathon.squirrel.domain.DotoriCollection;
 import com.chungkathon.squirrel.domain.Member;
-import com.chungkathon.squirrel.dto.response.MemberResponse;
-import com.chungkathon.squirrel.repository.DotoriCollectionJpaRepository;
 import com.chungkathon.squirrel.repository.DotoriJpaRepository;
 import com.chungkathon.squirrel.repository.MemberJpaRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +10,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +19,6 @@ public class DotoriService {
 
     private final S3Service s3Service;
     private final DotoriJpaRepository dotoriRepository;
-    private final DotoriCollectionJpaRepository dotoriCollectionRepository;
     private final MemberJpaRepository memberJpaRepository;
 
     public Dotori createDotori(MultipartFile file, DotoriCollection collection) {
