@@ -39,12 +39,14 @@ public class UserController {
 
         MemberResponse memberResponse = memberService.getMemberInfo(member);
         Boolean isOwner = dotoriCollectionService.getIsOwner(urlRnd);
+        int total_dotori = memberService.getTotalDotoriNum(urlRnd);
 
         // DTO를 ObjectNode로 변환
         ObjectNode response = objectMapper.valueToTree(memberResponse);
 
         // 동적 필드 추가
         response.put("isOwner", isOwner);
+        response.put("total_dotori", total_dotori);
 
         return ResponseEntity.ok(response);
     }
