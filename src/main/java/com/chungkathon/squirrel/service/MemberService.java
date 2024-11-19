@@ -1,5 +1,6 @@
 package com.chungkathon.squirrel.service;
 
+import com.chungkathon.squirrel.domain.DotoriCollection;
 import com.chungkathon.squirrel.domain.Member;
 import com.chungkathon.squirrel.dto.request.JoinRequest;
 import com.chungkathon.squirrel.dto.request.LoginRequest;
@@ -127,5 +128,20 @@ public class MemberService {
                 member.getSquirrelType(),
                 member.getUrlRnd()
         );
+    }
+
+    public int getTotalDotoriNum(String urlRnd) {
+        int result = 0;
+
+        Member member = memberJpaRepository.findByUrlRnd(urlRnd)
+                .orElseThrow(() -> new IllegalArgumentException("존재하는 urlRnd가 아닙니다."));
+
+        List<DotoriCollection> dotoriCollections = member.getDotoriCollections();
+
+        for (DotoriCollection dotoriCollection : dotoriCollections) {
+            result += dotoriCollection.getDotori_num();
+        }
+
+        return result;
     }
 }
