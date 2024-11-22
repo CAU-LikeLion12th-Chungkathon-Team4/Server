@@ -27,6 +27,7 @@ public class DotoriController {
     private final DotoriService dotoriService;
     private final DotoriCollectionJpaRepository dotoriCollectionRepository;
     private final DotoriJpaRepository dotoriRepository;
+    private final DotoriJpaRepository dotoriJpaRepository;
 
     @PostMapping("/upload")
     public ResponseEntity<Map<String, Object>> uploadMultipleDotori(
@@ -57,7 +58,8 @@ public class DotoriController {
                 .orElseThrow(() -> new IllegalArgumentException("collectionID가 존재하지 않음"));
 
         // 도토리 리스트를 받아오기
-        List<Dotori> dotoris = dotoriCollection.getDotoriList();
+//        List<Dotori> dotoris = dotoriCollection.getDotoriList();
+        List<Dotori> dotoris = dotoriJpaRepository.findAllActiveDotori(dotoriCollection);
 
         // 도토리 데이터 반환
         List<Map<String, Object>> dotoriData = dotoris.stream().map(dotori -> {
