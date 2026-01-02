@@ -4,7 +4,7 @@
 > 사용자는 다람쥐 캐릭터로 참여하여 사진을 공유하고,
 > 퀴즈를 통해 잠긴 도토리 주머니를 열며 추억을 완성합니다.
 
----
+
 
 ## 📌 프로젝트 개요
 <img width="1260" height="707" alt="image" src="https://github.com/user-attachments/assets/a221c0cd-b4f7-46a2-a087-9fe07eceadda" />
