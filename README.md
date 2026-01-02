@@ -98,7 +98,7 @@
 
 <img width="1428" height="880" alt="image" src="https://github.com/user-attachments/assets/71759b13-940a-4a38-90f7-f140a8f15cb0" />
 
-</br>
+</br></br>
 
 
 ## 🧩 핵심 구현 포인트
