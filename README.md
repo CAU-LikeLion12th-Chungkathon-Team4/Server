@@ -4,7 +4,7 @@
 > 사용자는 다람쥐 캐릭터로 참여하여 사진을 공유하고,
 > 퀴즈를 통해 잠긴 도토리 주머니를 열며 추억을 완성합니다.
 
-
+</br></br>
 
 ## 📌 프로젝트 개요
 <img width="1260" height="707" alt="image" src="https://github.com/user-attachments/assets/a221c0cd-b4f7-46a2-a087-9fe07eceadda" />
@@ -17,6 +17,7 @@
 * 퀴즈를 풀어야 잠긴 사진을 확인 가능
 * URL 공유를 통해 **비회원도 사진 열람 가능**
 
+</br></br>
 
 ## 🛠 기술 스택
 
@@ -42,6 +43,7 @@
 * Notion (기획 & API 문서화)
 
 
+</br></br>
 
 ## 🔐 인증 & 보안
 
@@ -51,6 +53,7 @@
 * CORS 설정 및 동적 URL 접근 이슈 해결
 
 
+</br></br>
 
 ## 💡 주요 기능
 ### 1. 회원
@@ -88,14 +91,14 @@
 * 도토리 주머니와 1:1 연결
 * 응답 결과에 따라 잠금 해제 여부 결정
 
-
+</br></br>
 
 
 ## 📂 ERD 구조 (요약)
 
 <img width="1428" height="880" alt="image" src="https://github.com/user-attachments/assets/71759b13-940a-4a38-90f7-f140a8f15cb0" />
 
-
+</br></br>
 
 
 ## 🧩 핵심 구현 포인트
@@ -106,7 +109,7 @@
 * 도토리 삭제 시 **연관 데이터 자동 정리**
 * JWT + SecurityConfig 세분화된 접근 제어
 
-
+</br></br>
 
 ## 📝 커밋 히스토리 요약
 
